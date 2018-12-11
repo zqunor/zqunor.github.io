@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <title>【实战】Tp5+小程序(二)--接口编写 | 程序小工</title>
+  <meta name="description" content="遇见更好的自己~">
+  <meta name="keywords" content="">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!-- <link rel="shortcut icon" href="../../../../img/favicon.ico"> -->
+  <link rel="shortcut icon" href="/img/favicon.ico">
+  <link rel="alternate" href="../../../../atom.xml" title="程序小工">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="ThinkPHP5 从入门到深入学习，结合实战项目深入理解 ThinkPHP5 的特性和使用方法。编写完成简单的基于 RESTFul 接口，实现相应功能，掌握控制器、模型、异常处理、数据校验的使用。">
+<meta name="keywords" content="thinkphp5,微信小程序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【实战】Tp5+小程序(二)--接口编写">
+<meta property="og:url" content="https://blog.i2arch.tech/2018/07/05/php-practice-wx-tp5-2/index.html">
+<meta property="og:site_name" content="程序小工">
+<meta property="og:description" content="ThinkPHP5 从入门到深入学习，结合实战项目深入理解 ThinkPHP5 的特性和使用方法。编写完成简单的基于 RESTFul 接口，实现相应功能，掌握控制器、模型、异常处理、数据校验的使用。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-16T12:14:52.026Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【实战】Tp5+小程序(二)--接口编写">
+<meta name="twitter:description" content="ThinkPHP5 从入门到深入学习，结合实战项目深入理解 ThinkPHP5 的特性和使用方法。编写完成简单的基于 RESTFul 接口，实现相应功能，掌握控制器、模型、异常处理、数据校验的使用。">
+
+  <link href="https://fonts.googleapis.com/css?family=Inconsolata|Titillium+Web" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+  <link href="//cdn.bootcss.com/node-waves/0.7.5/waves.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../style.css">
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+</head>
+</html>
+<body>
+  <div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+
+
+  <script>setLoadingBarProgress(20)</script>
+  <header class="l_header">
+	<div class="wrapper">
+		<div class="nav-main container container--flex">
+			<a class="logo flat-box" href="../../../../index.html">
+				程序小工
+			</a>
+			<div class="menu">
+				<ul class="h-list">
+					
+						<li>
+							<a class="flat-box nav-home" href="../../../../index.html">
+								<i class="icon icon-home"></i>
+								首页
+							</a>
+						</li>
+					
+						<li>
+							<a class="flat-box nav-archives" href="../../../../archives">
+								<i class="icon icon-books"></i>
+								归档
+							</a>
+						</li>
+					
+						<li>
+							<a class="flat-box nav-about" href="../../../../about">
+								<i class="icon icon-local_library"></i>
+								关于
+							</a>
+						</li>
+					
+				</ul>
+				<div class="underline"></div>
+			</div>
+			
+				<div class="m_search">
+					<form name="searchform" class="form u-search-form">
+						<input type="text" class="input u-search-input" placeholder="Search">
+						<span class="icon icon-search"></span>
+					</form>
+				</div>
+			
+			<ul class="switcher h-list">
+				
+					<li class="s-search"><a href="javascript:void(0)"><span class="icon icon-search flat-box"></span></a></li>
+				
+				<li class="s-menu"><a href="javascript:void(0)"><span class="icon icon-menu flat-box"></span></a></li>
+			</ul>
+		</div>
+
+		<div class="nav-sub container container--flex">
+			<a class="logo flat-box" href="javascript:void(0)">
+				post article title
+			</a>
+
+			<ul class="switcher h-list">
+				<li class="s-comment"><a href="javascript:void(0)"><span class="icon icon-chat_bubble_outline flat-box"></span></a></li>
+				<li class="s-toc"><a href="javascript:void(0)"><span class="icon icon-format_list_numbered flat-box"></span></a></li>
+				<li class="s-top"><a href="javascript:void(0)"><span class="icon icon-arrow_upward flat-box"></span></a></li>
+			</ul>
+		</div>
+	</div>
+	<a href="https://github.com/zqunor" class="github-corner" aria-label="View source on Github">
+		<svg class="svg" viewbox="0 0 250 250" aria-hidden="true">
+		  <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+		  <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+		</svg>
+	  </a>
+</header>
+<aside class="menu-phone">
+	<nav>
+		
+			<a href="../../../../index.html" class="nav nav-home">
+				<i class="icon icon-home"></i>
+				首页
+			</a>
+		
+			<a href="../../../../archives" class="nav nav-archives">
+				<i class="icon icon-books"></i>
+				归档
+			</a>
+		
+			<a href="../../../../about" class="nav nav-about">
+				<i class="icon icon-local_library"></i>
+				关于
+			</a>
+		
+	</nav>
+</aside>
+
+    <script>setLoadingBarProgress(40);</script>
+  <div class="l_body">
+    <div class='container clearfix'>
+      <!-- 左侧内容 -->
+      <div class='l_main'>
+        <article id="post-php-practice-wx-tp5-2" class="post white-box article-type-post" itemscope="" itemprop="blogPost">
+	<section class="meta">
+
+	<h2 class="title">
+  	<a href="">
+    	【实战】Tp5+小程序(二)--接口编写
+    </a>
+	</h2>
+
+	<div class="pagenav">
+		<time>
+			<i class="icon icon-event_available"></i>
+			2018-07-05
+		</time>
+
+		
+    
+    <div class="cats">
+        <i class="icon icon-folder-open"></i>
+        <a href="../../../../categories/PHP/">PHP</a>
+    </div>
+
+
+		<div class="pagetags">
+			<i class="icon icon-color-palette" style="margin-right: 2px;"></i>
+			
+				
+					<a href="../../../../tags/thinkphp5/" style="margin-left: 3px;">
+						thinkphp5
+					</a>
+				
+					<a href="../../../../tags/微信小程序/" style="margin-left: 3px;">
+						微信小程序
+					</a>
+				
+			
+		</div>
+	</div>
+	</section>
+
+	
+	<section class="toc-wrapper"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-banner-相关表分析数据表关系分析"><span class="toc-text"> 8-1 Banner 相关表分析（数据表关系分析）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-模型关联定义关联与查询关联"><span class="toc-text"> 8-2 模型关联–定义关联与查询关联</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-3-模型关联-嵌套关联查询"><span class="toc-text"> 8-3 模型关联 --嵌套关联查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-4-隐藏模型字段"><span class="toc-text"> 8-4 隐藏模型字段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-5-在模型内部隐藏字段"><span class="toc-text"> 8-5 在模型内部隐藏字段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-6-图片资源-url-配置"><span class="toc-text"> 8-6 图片资源 URL 配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-7-模型读取器的巧妙应用"><span class="toc-text"> 8-7 模型读取器的巧妙应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-8-自定义模型基类"><span class="toc-text"> 8-8 自定义模型基类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-9-定义-api-版本号"><span class="toc-text"> 8-9 定义 API 版本号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-10-专题接口模型分析"><span class="toc-text"> 8-10 专题接口模型分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-11-一对一关系解析"><span class="toc-text"> 8-11 一对一关系解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-12-theme-接口验证与重构"><span class="toc-text"> 8-12 Theme 接口验证与重构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-13-完成-theme-简要信息接口"><span class="toc-text"> 8-13 完成 Theme 简要信息接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-14-开启路由完整匹配"><span class="toc-text"> 8-14 开启路由完整匹配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-15-完成-theme-详情接口"><span class="toc-text"> 8-15 完成 Theme 详情接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1参数校验"><span class="toc-text"> 1.参数校验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2在模型中编写方法实现数据获取"><span class="toc-text"> 2.在模型中编写方法实现数据获取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3在控制器中调用"><span class="toc-text"> 3.在控制器中调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4编写异常处理类"><span class="toc-text"> 4.编写异常处理类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-16-数据库字段冗余的合理利用"><span class="toc-text"> 8-16 数据库字段冗余的合理利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-17-rest-的合理利用"><span class="toc-text"> 8-17 REST 的合理利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-18-最近新品接口编写"><span class="toc-text"> 8-18 最近新品接口编写</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#警告学会查看-log-日志信息提高错误排查能力"><span class="toc-text"> 【警告】学会查看 log 日志信息，提高错误排查能力！</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-19-使用数据集还是数组"><span class="toc-text"> 8-19 使用数据集还是数组？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-20-分类列表接口"><span class="toc-text"> 8-20 分类列表接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-21-扩展接口粒度与接口分层"><span class="toc-text"> 8-21 扩展：接口粒度与接口分层</span></a></li></ol></section>
+	
+
+	<section class="article typo">
+		<div class="article-entry" itemprop="articleBody">
+			<i class="icon icon-lamp"></i>
+			<span class="zhaiyao">摘要</span>
+		<p>ThinkPHP5 从入门到深入学习，结合实战项目深入理解 ThinkPHP5 的特性和使用方法。编写完成简单的基于 RESTFul 接口，实现相应功能，掌握控制器、模型、异常处理、数据校验的使用。</p>
+<a id="more"></a>
+<h2 id="8-1-banner-相关表分析数据表关系分析"><a class="markdownIt-Anchor" href="#8-1-banner-相关表分析数据表关系分析"></a> 8-1 Banner 相关表分析（数据表关系分析）</h2>
+<ul>
+<li>banner 位的数据表<code>banner</code></li>
+</ul>
+<p><code>banner(id, name, description, delete_time, update_time)</code></p>
+<ul>
+<li>每个 banner 位图片的数据表<code>banner_item</code></li>
+</ul>
+<p><code>banner_item(id, img_id, key_word, type, delete_time, banner_id, update_time)</code></p>
+<ul>
+<li>图片表<code>image</code></li>
+</ul>
+<p><code>image(id, url, from, delete_time, update_time)</code></p>
+<pre><code>banner &lt;=&gt; banner_item 一对多关系
+image &lt;=&gt; banner_item 一对一关系
+</code></pre>
+<h2 id="8-2-模型关联定义关联与查询关联"><a class="markdownIt-Anchor" href="#8-2-模型关联定义关联与查询关联"></a> 8-2 模型关联–定义关联与查询关联</h2>
+<blockquote>
+<p>model/Banner.php</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建关联方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">items</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 参数1：关联模型的模型名</span></span><br><span class="line">    <span class="comment">// 参数2：关联模型的外键</span></span><br><span class="line">    <span class="comment">// 参数3：当前模型的主键</span></span><br><span class="line">    <span class="comment">// hasMany：表示是一对多的关系</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;hasMany(<span class="string">'BannerItem'</span>, <span class="string">'banner_id'</span>, <span class="string">'id'</span>);</span><br><span class="line">    <span class="comment">// 【需要创建BannerItem模型类文件】</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>controller/Banner.php</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//with()方法，设置关联模型</span></span><br><span class="line">$banner = BannerModel::with(<span class="string">'items'</span>)-&gt;find($id);</span><br><span class="line"><span class="comment">//等价于 $banner = model('banner')-&gt;with('items')-&gt;find($id);</span></span><br></pre></td></tr></table></figure>
+<p>执行结果时会自动附件关联信息。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"id"</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"首页置顶"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">"首页轮播图"</span>,</span><br><span class="line">  <span class="attr">"delete_time"</span>: <span class="literal">null</span>,</span><br><span class="line">  <span class="attr">"update_time"</span>: <span class="string">"1970-01-01 08:00:00"</span>,</span><br><span class="line">  <span class="attr">"items"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"id"</span>: <span class="number">1</span>,</span><br><span class="line">      <span class="attr">"img_id"</span>: <span class="number">65</span>,</span><br><span class="line">      <span class="attr">"key_word"</span>: <span class="string">"6"</span>,</span><br><span class="line">      <span class="attr">"type"</span>: <span class="number">1</span>,</span><br><span class="line">      <span class="attr">"delete_time"</span>: <span class="literal">null</span>,</span><br><span class="line">      <span class="attr">"banner_id"</span>: <span class="number">1</span>,</span><br><span class="line">      <span class="attr">"update_time"</span>: <span class="string">"1970-01-01 08:00:00"</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="8-3-模型关联-嵌套关联查询"><a class="markdownIt-Anchor" href="#8-3-模型关联-嵌套关联查询"></a> 8-3 模型关联 --嵌套关联查询</h2>
+<p>1.多个关联表</p>
+<pre><code>with(['items','item2'])
+</code></pre>
+<p>2.命令行创建模型（自动完成模板）</p>
+<pre><code>php think make:model api/Image
+</code></pre>
+<p>3.banner 嵌套 items，现在需要给 items 嵌套 img 相关信息</p>
+<p>多层嵌套使用方法：</p>
+<pre><code>with(['items', 'items.img'])
+</code></pre>
+<p>4.具体实现：</p>
+<ul>
+<li><code>model/BannerItem.php</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">img</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// BannerItem和Image是一对一的关系，使用的方法是belongsTo</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;belongsTo(<span class="string">'Image'</span>, <span class="string">'img_id'</span>, <span class="string">'id'</span>);</span><br><span class="line">    <span class="comment">//【需要创建Image模型类文件】</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也可以在<code>model/Image.php</code>中定义,实现的效果是一样的。</p>
+<ul>
+<li><code>controller/Banner.php</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 多层嵌套的使用</span></span><br><span class="line">$banner = BannerModel::with([<span class="string">'items'</span>, <span class="string">'items.img'</span>])-&gt;find($id);</span><br></pre></td></tr></table></figure>
+<p>5.实现效果如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"id"</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"首页置顶"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">"首页轮播图"</span>,</span><br><span class="line">  <span class="attr">"delete_time"</span>: <span class="literal">null</span>,</span><br><span class="line">  <span class="attr">"update_time"</span>: <span class="string">"1970-01-01 08:00:00"</span>,</span><br><span class="line">  <span class="attr">"items"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"id"</span>: <span class="number">1</span>,</span><br><span class="line">      <span class="attr">"img_id"</span>: <span class="number">65</span>,</span><br><span class="line">      <span class="attr">"key_word"</span>: <span class="string">"6"</span>,</span><br><span class="line">      <span class="attr">"type"</span>: <span class="number">1</span>,</span><br><span class="line">      <span class="attr">"delete_time"</span>: <span class="literal">null</span>,</span><br><span class="line">      <span class="attr">"banner_id"</span>: <span class="number">1</span>,</span><br><span class="line">      <span class="attr">"update_time"</span>: <span class="string">"1970-01-01 08:00:00"</span>,</span><br><span class="line">      <span class="attr">"img"</span>: &#123;</span><br><span class="line">        <span class="attr">"id"</span>: <span class="number">65</span>,</span><br><span class="line">        <span class="attr">"url"</span>: <span class="string">"/banner-4a.png"</span>,</span><br><span class="line">        <span class="attr">"from"</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="attr">"delete_time"</span>: <span class="literal">null</span>,</span><br><span class="line">        <span class="attr">"update_time"</span>: <span class="string">"1970-01-01 08:00:00"</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;...&#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="8-4-隐藏模型字段"><a class="markdownIt-Anchor" href="#8-4-隐藏模型字段"></a> 8-4 隐藏模型字段</h2>
+<ul>
+<li>方法 1：将对象转化为数组<code>toArray()</code>，再将该字段 unset</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$banner = $banner-&gt;toArray();</span><br><span class="line"><span class="keyword">unset</span>($banner[<span class="string">'delete_time'</span>]);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>方法 2：使用对象的 <code>hidden()</code> 方法</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$banner-&gt;hidden([<span class="string">'update_time'</span>, <span class="string">'delete_time'</span>]);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>方法 3：只显示指定字段<code>visible()</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$banner-&gt;visible([<span class="string">'id'</span>, <span class="string">'name'</span>]);</span><br></pre></td></tr></table></figure>
+<h2 id="8-5-在模型内部隐藏字段"><a class="markdownIt-Anchor" href="#8-5-在模型内部隐藏字段"></a> 8-5 在模型内部隐藏字段</h2>
+<p>1.对嵌套的数据字段隐藏</p>
+<p>最好的办法：在相应的模型类中定义相应的属性。</p>
+<ul>
+<li>想要隐藏 <code>banner</code> 的字段信息</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// model/Banner.php</span></span><br><span class="line"><span class="comment">// 隐藏的字段</span></span><br><span class="line"><span class="keyword">protected</span> $hidden = [<span class="string">'id'</span>];</span><br><span class="line"><span class="comment">// 只显示的字段</span></span><br><span class="line"><span class="keyword">protected</span> $visibale = [<span class="string">'name'</span>,<span class="string">'update_time'</span>];</span><br></pre></td></tr></table></figure>
+<ul>
+<li>想要隐藏 <code>banner.items</code> 下的字段信息：</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// model/BannerItem.php</span></span><br><span class="line"><span class="keyword">protected</span> $hidden = [<span class="string">'id'</span>];</span><br></pre></td></tr></table></figure>
+<ul>
+<li>想要隐藏 <code>banner.items.img</code> 的字段信息</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// model/Image.php</span></span><br><span class="line"><span class="keyword">protected</span> $hidden = [<span class="string">'from'</span>];</span><br></pre></td></tr></table></figure>
+<h2 id="8-6-图片资源-url-配置"><a class="markdownIt-Anchor" href="#8-6-图片资源-url-配置"></a> 8-6 图片资源 URL 配置</h2>
+<p>1.数据库存放的图片 url 是相对地址，所以获取的数据也是相对地址，不能直接获取到图片的具体资源位置。</p>
+<pre><code>具体路径 = 服务器域名+路径配置+相对地址
+</code></pre>
+<p>2.定义自己项目相关的配置 =》 自定义配置文件</p>
+<p>TP5 扩展配置目录 =》自动加载该目录下的配置文件</p>
+<p>默认位置：<code>application/extra</code></p>
+<p>3.定义配置项:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// application/extra/setting.php</span></span><br><span class="line"><span class="keyword">return</span> [</span><br><span class="line">  <span class="string">'img_prefix'</span> =&gt; <span class="string">'http://mypro.com/static/images'</span></span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<p>4.tp5 中只有 public 目录是对外公开，可以访问的，所以图片资源应当放在 public 目录下</p>
+<p>5.读取配置文件：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 配置文件自动被加载，直接读取配置项即可</span></span><br><span class="line">config(<span class="string">'setting.img_prefix'</span>);</span><br></pre></td></tr></table></figure>
+<p>6.<strong>【注】：如果自定义了<code>CONF_PATH</code>目录，则自动加载的配置文件目录应该在<code>config/extra</code>目录下</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// public/index.php</span></span><br><span class="line"><span class="comment">// 自定义CONF_PATH目录</span></span><br><span class="line">define(<span class="string">'CONF_PATH'</span>, <span class="keyword">__DIR__</span> . <span class="string">'/../config/'</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="8-7-模型读取器的巧妙应用"><a class="markdownIt-Anchor" href="#8-7-模型读取器的巧妙应用"></a> 8-7 模型读取器的巧妙应用</h2>
+<p>1.读取器的命名：<code>get+字段名+Attr</code></p>
+<p>如对 url 处理则定义为<code>getUrlAttr</code></p>
+<p>2.读取器的特性：</p>
+<ul>
+<li>
+<p>模型具有的性质</p>
+</li>
+<li>
+<p>使用模型时自动调用的方法（访问该属性时调用）</p>
+</li>
+<li>
+<p>AOP 思想的一个实现</p>
+<p>3.接收器参数说明：</p>
+<pre><code>参数1：需要处理的字段的值
+参数2：当前记录的完整信息(包括隐藏未显示的字段)
+</code></pre>
+<p>4.使用方法：</p>
+</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义读取器（框架自动调用）</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getUrlAttr</span><span class="params">($value)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// $value为获取到的url值。</span></span><br><span class="line">    $prefix = config(<span class="string">'setting.img_prefix'</span>);</span><br><span class="line">    <span class="keyword">return</span> $prefix.$value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>url 字段被自动拼接成：<code>&quot;url&quot;: &quot;http://mypro.com/static/images/banner-4a.png&quot;</code>形式</p>
+<p>5.根据业务逻辑进行调整</p>
+<p>image 数据表中的<code>from</code>字段标识当前图片的来源。</p>
+<pre><code>from=1 =》 图片来自当前项目，存储的是 相对路径
+from=2 =》 图片来自网络，存储的是 绝对路径
+</code></pre>
+<p>即：当 from=1 时，才需要对 url 进行相关操作。</p>
+<p>此时需要访问到<code>from</code>的值，要用到第二个参数。</p>
+<p>6.调整代码实现</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义读取器（框架自动调用）</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getUrlAttr</span><span class="params">($value, $data)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// $value 获取到的url值。</span></span><br><span class="line">    <span class="comment">// $data 当前记录的完整信息(包括隐藏未显示的字段)</span></span><br><span class="line"></span><br><span class="line">    $finalUrl = $value;</span><br><span class="line">    <span class="keyword">if</span> ($data[<span class="string">'from'</span>] == <span class="number">1</span>) &#123;</span><br><span class="line">        $prefix = config(<span class="string">'setting.img_prefix'</span>);</span><br><span class="line">        $finalUrl = $prefix . $value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> $finalUrl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过关联模型访问 Image 模型并获取 url 字段信息时调用该方法。</p>
+<h2 id="8-8-自定义模型基类"><a class="markdownIt-Anchor" href="#8-8-自定义模型基类"></a> 8-8 自定义模型基类</h2>
+<p>1.对于多个模型处理 url 字段时，为增强代码的复用性，可将该处理方法封装到模型类基类<code>model/BaseModel.php</code>中。</p>
+<p>2.其他的模型类不再直接继承<code>model</code>类，而是直接继承<code>BaseModel</code>类。</p>
+<p>3.又考虑到当前使用的 url 表示的是 img 路径，而其他数据表中的 url 可能并非 img 路径，所以需要再次调整。将<code>getUrlAttr</code>功能的具体实现进行拆分。</p>
+<p>(1) <code>model/BaseModel.php</code>，定义成一个普通的方法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">prefixImgUrl</span><span class="params">($value, $data)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $finalUrl = $value;</span><br><span class="line">    <span class="keyword">if</span> ($data[<span class="string">'from'</span>] == <span class="number">1</span>) &#123;</span><br><span class="line">        $prefix = config(<span class="string">'setting.img_prefix'</span>);</span><br><span class="line">        $finalUrl = $prefix . $value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> $finalUrl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>(2) <code>model/Image.php</code>，读取器中调用基类的方法。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getUrlAttr</span><span class="params">($value, $data)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;prefixImgUrl($value, $data);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>(3)分析：将业务逻辑的具体实现集中到一起，简化业务变动时的频繁修改。提高了项目的<strong>扩展性</strong>。</p>
+<h2 id="8-9-定义-api-版本号"><a class="markdownIt-Anchor" href="#8-9-定义-api-版本号"></a> 8-9 定义 API 版本号</h2>
+<p>1.为什么要实现多版本？</p>
+<p>由于业务调整，实现的功能需要进行变更，（处理同一个问题需要使用不同解决方式），并且之前的功能还需要兼容，此时如果通过判断条件进行判断，再执行相应的功能会使得代码冗余，违背代码的<strong>开闭原则</strong>。应该将代码分离出来，每一个版本做一个单独的代码模块。</p>
+<blockquote>
+<p>开闭原则：对扩展是开放的，对修改是封闭的。（以扩展的形式修改代码）</p>
+</blockquote>
+<p>2.如何实现多版本？</p>
+<ul>
+<li>目录设置:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">application</span><br><span class="line">    |__ api</span><br><span class="line">        |__ controller</span><br><span class="line">            |__ v1</span><br><span class="line">                |__ Banner.php</span><br><span class="line">            |__ v2</span><br><span class="line">                |__ Banner.php</span><br></pre></td></tr></table></figure>
+<ul>
+<li>路由设置：</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 动态参数 :version 动态访问相应版本</span></span><br><span class="line">Route::get(<span class="string">'api/:version/banner/:id'</span>, <span class="string">'api/:version.Banner/getBanner'</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="8-10-专题接口模型分析"><a class="markdownIt-Anchor" href="#8-10-专题接口模型分析"></a> 8-10 专题接口模型分析</h2>
+<ul>
+<li>
+<p>theme 专题表<br>
+<code>theme(id,name,description,topic_img_id,delete_time,head_img_id,update_time)</code></p>
+<pre><code>`topic_img_id` 首页主题入口的img图片
+`head_img_id` 进入相应主题显示的head图片
+</code></pre>
+</li>
+<li>
+<p>product 产品表<br>
+<code>product(id,name,price,stock,delete_time,category_id,main_img_url,from,create_time,update_time,summary,img_id)</code></p>
+<pre><code>`main_img_url`
+`img_id`
+</code></pre>
+</li>
+<li>
+<p>theme_product 专题-产品关联表<br>
+<code>theme_product(theme_id,product_id)</code></p>
+<pre><code>theme &lt;=&gt; product 多对多关系
+theme_product 多对多关系表中需要一个关联表连接两者关系
+</code></pre>
+</li>
+</ul>
+<h2 id="8-11-一对一关系解析"><a class="markdownIt-Anchor" href="#8-11-一对一关系解析"></a> 8-11 一对一关系解析</h2>
+<pre><code>theme &lt;=&gt; image 一对一关系
+</code></pre>
+<p>1.一对一关系的表示方法（有主从关系）：</p>
+<pre><code>hasOne()
+belongsTo()
+</code></pre>
+<p>外键存储在其中一张表里，所以需要使用<code>hasOne</code>和<code>belongsTo</code>来区分。</p>
+<pre><code>有外键的表`belongsTo`无外键的表
+无外键的表`hasOne`有外键的表
+</code></pre>
+<p>theme – (topic_img_id, head_img_id) – 表中有外键 (对应 image 表中的 id 主键)<br>
+=》 theme topicImg belongsTo image</p>
+<p>image – 表中没有外键<br>
+=》 image hasOne theme</p>
+<h2 id="8-12-theme-接口验证与重构"><a class="markdownIt-Anchor" href="#8-12-theme-接口验证与重构"></a> 8-12 Theme 接口验证与重构</h2>
+<p>1.Theme 接口实现的不同方法对比：</p>
+<p>（1）客户端只负责调用接口，由接口确定需要返回的主题 theme 的 id 号（2）由客户端传入具体需要的主题 Theme 的 id 号（前端有更大的灵活性）</p>
+<p>2.方法实现</p>
+<p>步骤：</p>
+<p>(1)定义控制器方法名</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// api/controller/v1/Theme.php</span></span><br><span class="line">getSimpleList();</span><br></pre></td></tr></table></figure>
+<p>(2)路由文件定义路由</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// config/route.php</span></span><br><span class="line">Route::get(<span class="string">'api/:version/theme'</span>, <span class="string">'api/:version.Theme/getSimpleList'</span>);</span><br></pre></td></tr></table></figure>
+<p>(3)控制器方法具体实现业务功能（一） — 参数要求</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取需要展示的主题theme</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Location</span> api/controller/v1/Theme.php</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> string $ids</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> string $theme</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<p>(4)验证器验证</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// api/validate/IDCollection.php</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 1.验证规则</span></span><br><span class="line"><span class="keyword">protected</span> $rule = [</span><br><span class="line">    <span class="string">'ids'</span> =&gt; <span class="string">'require|checkIDs'</span></span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2.验证不通过的提示信息</span></span><br><span class="line"><span class="keyword">protected</span> $message = [</span><br><span class="line">    <span class="string">'ids'</span> =&gt; <span class="string">'ids必须是以逗号隔开的多个正整数'</span></span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3.自定义验证方法(验证器)</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 验证ids</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> string $values = id1,id2,id3,...</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> bool false/true</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">checkIDs</span><span class="params">($values)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $ids = explode(<span class="string">','</span>, $values);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">empty</span>($ids)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">foreach</span> ($ids <span class="keyword">as</span> $id) &#123;</span><br><span class="line">        <span class="comment">// 每个id必须是正整数</span></span><br><span class="line">        $res = <span class="keyword">$this</span>-&gt;isPositiveInteger($id);</span><br><span class="line">        <span class="keyword">if</span> (!$res) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3.<strong>扩展</strong>:</p>
+<p>IDCollection 和 IDMustPositiveInt 都用到对 id 是正整数的验证，为提高代码的复用性，可以：</p>
+<pre><code>（1）将isPositiveInteger提取到公共方法中（没有内聚性）
+
+（2）将方法重新定义到验证器基类中供所有验证器之类调用。（优化的选择）
+</code></pre>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// api/validate/BaseValidate.php</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 验证是否是正整数</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> int $value</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> boolean false/true</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">isPositiveInteger</span><span class="params">($value)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (is_numeric($value) &amp;&amp; is_int($value+<span class="number">0</span>) &amp;&amp; ($value +<span class="number">0</span>)&gt;<span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>4.调用验证器</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// api/controller/v1/Theme.php</span></span><br><span class="line">(<span class="keyword">new</span> IDCollection())-&gt;goCheck();</span><br></pre></td></tr></table></figure>
+<p>5.测试 url</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://mypro.com/api/v1/theme?ids=0.1,2,3</span><br><span class="line">http://mypro.com/api/v1/theme?ids=1,s,3</span><br></pre></td></tr></table></figure>
+<h2 id="8-13-完成-theme-简要信息接口"><a class="markdownIt-Anchor" href="#8-13-完成-theme-简要信息接口"></a> 8-13 完成 Theme 简要信息接口</h2>
+<p>1.完成获取信息接口</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// api/controller/v1/Theme.php</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getSimpleList</span><span class="params">($ids=<span class="string">''</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 验证用户传递的参数</span></span><br><span class="line">    (<span class="keyword">new</span> IDCollection())-&gt;goCheck();</span><br><span class="line"></span><br><span class="line">    $ids = explode(<span class="string">','</span>, $ids);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 关联Image表获取相应信息</span></span><br><span class="line">    $theme = model(<span class="string">'theme'</span>)-&gt;with([<span class="string">'topicImg'</span>, <span class="string">'headImg'</span>])-&gt;select($ids);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 无查询结果时，进行异常处理</span></span><br><span class="line">    <span class="keyword">if</span> (!$theme) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> ThemeMissException();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 对数组格式的返回数据进行json格式化</span></span><br><span class="line">    <span class="keyword">return</span> json($theme);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2.完成异常处理类</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// application/lib/exception/ThemeMissException.php</span></span><br><span class="line"><span class="keyword">public</span> $code = <span class="number">404</span>;</span><br><span class="line"><span class="keyword">public</span> $msg = <span class="string">'请求的主题不存在'</span>;</span><br><span class="line"><span class="keyword">public</span> $errorCode = <span class="number">30000</span>;</span><br></pre></td></tr></table></figure>
+<p>3.在相应的模型中隐藏部分字段</p>
+<p>(1)隐藏 Theme 表的部分字段</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// api/model/v1/Theme.php</span></span><br><span class="line"><span class="keyword">protected</span> $hidden = [<span class="string">'delete_time'</span>, <span class="string">'update_time'</span>, <span class="string">'topic_img_id'</span>, <span class="string">'head_img_id'</span>];</span><br></pre></td></tr></table></figure>
+<p>(2)隐藏 Image 表的部分字段(只显示部分字段)</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// api/model/v1/Image.php</span></span><br><span class="line"><span class="keyword">protected</span> $visible = [<span class="string">'url'</span>];</span><br></pre></td></tr></table></figure>
+<p>4.补充说明：</p>
+<p>对于复杂的业务处理，应该将相应的代码写到 Service 层(Model 层之上) – 特别是涉及到多个模型之间的关联的时候</p>
+<h2 id="8-14-开启路由完整匹配"><a class="markdownIt-Anchor" href="#8-14-开启路由完整匹配"></a> 8-14 开启路由完整匹配</h2>
+<p>1.功能需求说明</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">点击专题图片进入到专题后需要显示相应的产品图片、</span><br><span class="line"></span><br><span class="line">=》获取属于该专题的产品信息</span><br><span class="line"></span><br><span class="line">（一个产品可以属于一个专题，也可以属于多个专题； 一个专题会包含多个产品） ==》多对多关系[Theme &lt;=&gt; Product]</span><br><span class="line"></span><br><span class="line">多对多关系的数据表有一个中间关联表</span><br></pre></td></tr></table></figure>
+<p>2.模型关联获取关联的数据</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// api/model/Theme.php</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">products</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 参数1： 对应数据表的模型名</span></span><br><span class="line">    <span class="comment">// 参数2： 关联表的模型名</span></span><br><span class="line">    <span class="comment">// 参数3： 关联表中的外键名(和参数1模型关联)</span></span><br><span class="line">    <span class="comment">// 参数4： 关联表的外键(关联当前模型)</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;belongsToMany(<span class="string">'Product'</span>, <span class="string">'theme_product'</span>, <span class="string">'product_id'</span>. <span class="string">'theme_id'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3.编写控制器方法(定义方法名和需要接收的参数)</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// api/v1/controller/Theme.php</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getProducts</span><span class="params">($id)</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>4.定义路由</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Route::get(<span class="string">'api/:version/theme/:id'</span>, <span class="string">'api/:version.Theme/getProducts/:id'</span>);</span><br></pre></td></tr></table></figure>
+<p>【注意】：</p>
+<p>默认情况下 TP5 的配置项是关闭路由完整匹配的，这种情况下访问当前路由接口时，由于先匹配到<code>api/:version/theme</code>路由，便不会再继续向下匹配路由，从而会调用该路由对应的接口。</p>
+<p>==》<strong>解决办法</strong>：<code>开启路由完整匹配</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// application/config.php默认配置文件路径</span></span><br><span class="line"><span class="comment">// 路由使用完整匹配（设置为true时开启）</span></span><br><span class="line"><span class="string">'route_complete_match'</span>   =&gt; <span class="keyword">false</span>,  <span class="comment">// =&gt;true</span></span><br></pre></td></tr></table></figure>
+<h2 id="8-15-完成-theme-详情接口"><a class="markdownIt-Anchor" href="#8-15-完成-theme-详情接口"></a> 8-15 完成 Theme 详情接口</h2>
+<h3 id="1参数校验"><a class="markdownIt-Anchor" href="#1参数校验"></a> 1.参数校验</h3>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// api/v1/controller/Theme.php</span></span><br><span class="line">(<span class="keyword">new</span> IDMustPositiveInt)-&gt;check();</span><br></pre></td></tr></table></figure>
+<h3 id="2在模型中编写方法实现数据获取"><a class="markdownIt-Anchor" href="#2在模型中编写方法实现数据获取"></a> 2.在模型中编写方法实现数据获取</h3>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// api/model/Theme.php</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getThemeWithProducts</span><span class="params">($id)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $theme = <span class="keyword">self</span>::with(<span class="string">'products,topicImg,headImg'</span>)-&gt;find($id);</span><br><span class="line">    <span class="keyword">return</span> $theme;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>【注】REST 是面向资源的请求方式，即将相关的数据全部返回给客户端，不管客户端目前需不需要用得上，但这种方式返回的资源应该有一个限度，</p>
+<h3 id="3在控制器中调用"><a class="markdownIt-Anchor" href="#3在控制器中调用"></a> 3.在控制器中调用</h3>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// api/v1/controller/Theme.php</span></span><br><span class="line">$theme = model(<span class="string">'theme'</span>)-&gt;getThemeWithProducts($id);</span><br><span class="line"><span class="keyword">if</span>(!$theme) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> ThemeMissException();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> $theme;</span><br></pre></td></tr></table></figure>
+<h3 id="4编写异常处理类"><a class="markdownIt-Anchor" href="#4编写异常处理类"></a> 4.编写异常处理类</h3>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// api/lib/exception/ThemeMissException.php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ThemeMissException</span> <span class="keyword">extends</span> <span class="title">BaseException</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 覆盖父类的相应属性</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> $code = <span class="number">404</span>;</span><br><span class="line">    <span class="keyword">public</span> $msg = <span class="string">'请求的主题不存在'</span>;</span><br><span class="line">    <span class="keyword">public</span> $errorCode = <span class="number">30000</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="8-16-数据库字段冗余的合理利用"><a class="markdownIt-Anchor" href="#8-16-数据库字段冗余的合理利用"></a> 8-16 数据库字段冗余的合理利用</h2>
+<p>多对多关系的数据表关联查询时会自动多一个<code>pivot</code>字段的信息，存储关联字段。但关联信息不是我们需要显示的信息，所以将该字段隐藏掉。</p>
+<p><code>products</code>中<code>main_img_url</code>和<code>img_id</code>都是用来关联 image 表，记录图片信息。属于数据冗余。</p>
+<p>但此处是数据冗余的合理应用范围，因为需要在多处使用到，并且数据量和业务并不是太复杂。</p>
+<h2 id="8-17-rest-的合理利用"><a class="markdownIt-Anchor" href="#8-17-rest-的合理利用"></a> 8-17 REST 的合理利用</h2>
+<p>1.数据冗余之后对数据的完整性和一致性的维护变得困难。</p>
+<p>2.数据更新时需要对多处数据进行修改，否则就会出现数据不一致的现象。</p>
+<p>3.完成方法编写(对 product 相关字段的 url 进行处理—添加前缀)</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// api/model/Product.php</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getMainImgUrlAttr</span><span class="params">($value, $data)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;prefixImgUrl($value, $data);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>4.REST 设计原则</p>
+<p>(1)REST 是基于资源的，凡是和业务相关的数据都应该返回，不管当前的业务是否需要使用相应的数据。</p>
+<p>好处在于后期业务变更需要相应的数据的时候，可以直接调用即可，不用更改服务器的接口程序，可以用来保证客户端的稳定性。</p>
+<p>(2)但也不能一味的将所有相关的数据返回，会消耗数据库的性能。</p>
+<h2 id="8-18-最近新品接口编写"><a class="markdownIt-Anchor" href="#8-18-最近新品接口编写"></a> 8-18 最近新品接口编写</h2>
+<p>1.TP5 框架自带时间更新操作,使用模型操作数据库时，当插入记录时，自动带上<code>create_time</code>; 更新操作时自动带上<code>updated_time</code>;删除时自动带上<code>delete_time</code></p>
+<p>2.删除操作不是真实的物理删除，而是通过判断<code>delete_time</code>的值来确定该条记录的状态</p>
+<p>3.实现步骤</p>
+<p>(1)定义控制器方法 [方法名|传递参数]</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getRecent</span><span class="params">($count=<span class="number">15</span>)</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>(2)定义路由</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Route::get(<span class="string">'api/:version/product/recent'</span>, <span class="string">'api/:version.Product/getRecent'</span>);</span><br></pre></td></tr></table></figure>
+<p>(3)定义模型方法</p>
+<ul>
+<li>limit()方法的使用</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getMostRecent</span><span class="params">($count)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $products = <span class="keyword">self</span>::limit($count)-&gt;order(<span class="string">'create_time desc'</span>)-&gt;select();</span><br><span class="line">    <span class="keyword">return</span> $products;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>(4)编写验证器</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//需要对传递的count值进行验证</span></span><br><span class="line"><span class="comment">// application/validate/Count.php</span></span><br><span class="line"><span class="keyword">protected</span> $rule = [</span><br><span class="line">    <span class="string">'count'</span> =&gt; <span class="string">'isPositiveInteger|between:1,15'</span></span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<p>(5)完成控制器方法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getRecent</span><span class="params">($count=<span class="number">15</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    (<span class="keyword">new</span> Count())-&gt;goCheck();</span><br><span class="line">    $products = model(<span class="string">'product'</span>)-&gt;getMostRecent($count);</span><br><span class="line">    <span class="keyword">if</span> ($products) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> ProductMissException();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> $products;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>(6)完成异常处理类方法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProductMissException</span> <span class="keyword">extends</span> <span class="title">BaseException</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $code = <span class="string">'404'</span>;</span><br><span class="line">    <span class="keyword">public</span> $msg = <span class="string">'请求的product不存在'</span>;</span><br><span class="line">    <span class="keyword">public</span> $errorCode = <span class="number">20000</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[注]：<code>app_debug</code>设置为 true 时，在<code>ExceptionHandler.php</code>中会调用父类的<code>render()</code>方法，导致框架的异常处理类找不到程序中自定义的异常处理类，从而会有报错提示。</p>
+<p>!!!出现 500 系统内部错误!</p>
+<ul>
+<li>
+<p>原因=&gt;config.php 设置<code>default_return_type</code>的值为<code>html</code>, 而 Product 的 controller 中 return 的结果值为 array，导致系统内部错误。</p>
+</li>
+<li>
+<p>解决=&gt;将<code>default_return_type</code>的值为<code>json</code>。或者将 Product 的 controller 中 return 的结果进行 json 格式化。</p>
+</li>
+</ul>
+<h3 id="警告学会查看-log-日志信息提高错误排查能力"><a class="markdownIt-Anchor" href="#警告学会查看-log-日志信息提高错误排查能力"></a> <strong>【警告】学会查看 log 日志信息，提高错误排查能力！</strong></h3>
+<h2 id="8-19-使用数据集还是数组"><a class="markdownIt-Anchor" href="#8-19-使用数据集还是数组"></a> 8-19 使用数据集还是数组？</h2>
+<p>1.问题 1：验证方法中，<code>$rule</code>属性数组的键值对中， 值<code>'isPositiveInteger|between:1,15'</code>中<code>|</code>符两端不能有空格，否则会被视为验证错误。</p>
+<p>2.问题 2：对某些当前不需要用到，但后期会用到的字段信息（特殊情况不用，大多数情况要用），既不能直接显示，也不能直接隐藏，如何处理？</p>
+<p>=》 在<code>api/v1/Product/recent</code>接口中临时隐藏<code>summary</code>字段。</p>
+<p>3.<strong>collection()方法</strong>：临时隐藏某个或某些字段</p>
+<p>【使用方法】：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用数据集，临时隐藏某些字段</span></span><br><span class="line">$productCollection = collection($products);</span><br><span class="line">$products = $productCollection-&gt;hidden([<span class="string">'summary'</span>]);</span><br></pre></td></tr></table></figure>
+<p>4.一个 product 是一个对象，一组 product 也可是是一个对象(数据集)。</p>
+<p>5.使用对象的方式，可读性好，内聚性好。</p>
+<p>6.TP5 调用模型自动返回一个数据集的形式：<code>resultset_type</code> [database.php]</p>
+<p>默认是<code>array</code>，设置成<code>collection</code>后，模型返回的数据自动就是<code>collection</code>形式，不需要再转换一次。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在database.php中配置之后，不需要手动转换为collection</span></span><br><span class="line">$products = $products-&gt;hidden([<span class="string">'summary'</span>]);</span><br></pre></td></tr></table></figure>
+<p>【扩展】：</p>
+<p>但是这样使用之后，控制器中调用模型返回数据后，返回的是对象，即使没有数据，也不是空，所以直接使用<code>!</code>判断是不能实现效果的。</p>
+<p>=》解决方法：使用数据集对象的<code>isEmpty()</code>方法进行判空。</p>
+<h2 id="8-20-分类列表接口"><a class="markdownIt-Anchor" href="#8-20-分类列表接口"></a> 8-20 分类列表接口</h2>
+<p>1.模型类的<code>all</code>方法使用。</p>
+<ul>
+<li>
+<p>参数 1：主键列表或者查询条件（闭包） <code>mixed</code></p>
+</li>
+<li>
+<p>参数 2：关联预查询 <code>array | string</code></p>
+</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$categories = model(<span class="string">'Category'</span>)-&gt;with(<span class="string">'img'</span>)-&gt;select();</span><br><span class="line"><span class="comment">// 等价于</span></span><br><span class="line">$categories = model(<span class="string">'Category'</span>)-&gt;all([], <span class="string">'img'</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="8-21-扩展接口粒度与接口分层"><a class="markdownIt-Anchor" href="#8-21-扩展接口粒度与接口分层"></a> 8-21 扩展：接口粒度与接口分层</h2>
+<p>1.减少首页 http 请求(api)的次数，从而减轻服务器的压力</p>
+<p>2.接口粒度： 太粗=》代码复用性不好，不够灵活；太细=》需要发送的请求太多，不方便</p>
+<p>3.架构师 =》 Api 接口设计 =》 底层设计力度比较小、灵活性比较高的 api 接口；越往上粒度逐渐变粗。</p>
+<p>4.如果确实调用的接口比较多，应该在 api 基础数据层上建立业务层，再在业务层调用基础数据层相关的接口，再进行封装。</p>
+
+	</div>
+	
+		<blockquote class="post-announce">
+			<ul>
+				<li>版权声明:  感谢您的阅读，本文由<a href="/">程序小工</a>版权所有。如若转载，请注明出处。</li>
+				<li>文章标题: <span class"title"="">【实战】Tp5+小程序(二)--接口编写</span></li>
+				<li>文章链接: <a href="">https://blog.i2arch.tech2018/07/05/php-practice-wx-tp5-2/</a></li>
+			</ul>
+		</blockquote>
+	  
+
+		
+			<div class="art-item-footer">
+				<span class="art-item-right">
+					上一篇:
+					
+						<a href="../../06/linux-crontab/" rel="prev" title="【Linux】系统学习Crontab定时任务">
+							【Linux】系统学习Crontab定时任务
+							<i class="icon icon-chevron-thin-right"></i>
+						</a>
+					
+				</span>
+				<br>
+				<span class="art-item-right">
+					下一篇:
+					
+						<a href="../http-ouath/" rel="next" title="【PHP】第三方登录OAuth2.0">
+							【PHP】第三方登录OAuth2.0
+							<i class="icon icon-chevron-thin-right"></i>
+						</a>
+					
+				</span>
+			</div>
+		
+
+		
+			
+
+    <div class="recommended_posts">
+        <h3>
+            <i class="icon icon-book1"></i>
+            推荐文章
+        </h3>
+        <ul>
+            
+                <li>
+                    <i class="icon icon-point-right"></i>
+                    <a href="https://blog.i2arch.tech/2018/07/07/web-goserver/">
+                        【Linux】网站上线
+                    </a>
+                </li>
+            
+                <li>
+                    <i class="icon icon-point-right"></i>
+                    <a href="https://blog.i2arch.tech/2018/07/06/linux-crontab/">
+                        【Linux】系统学习Crontab定时任务
+                    </a>
+                </li>
+            
+                <li>
+                    <i class="icon icon-point-right"></i>
+                    <a href="https://blog.i2arch.tech/2018/07/05/http-ouath/">
+                        【PHP】第三方登录OAuth2.0
+                    </a>
+                </li>
+            
+                <li>
+                    <i class="icon icon-point-right"></i>
+                    <a href="https://blog.i2arch.tech/2018/07/01/php-practice-wx-tp5-1/">
+                        【实战】Tp5+小程序(一)--数据库访问与ORM
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+		
+		<div class="gotop">
+			    <a href="javascript:void(0)">
+        <i class="icon icon-rocket flat-box"></i>
+    </a>
+
+		</div>
+	</section>
+
+	
+
+</article>
+<script>
+	window.subData = {
+		title: '【实战】Tp5+小程序(二)--接口编写',
+		tools: true
+	}
+</script>
+
+      </div>
+
+      <!-- 右侧边栏组件 -->
+      <aside class='l_side'>
+        
+
+
+
+
+
+
+
+      </aside>
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+  </div>
+  <footer id="footer" class="clearfix">
+
+	<div class="social-wrapper">
+  	
+      
+        <a href="https://github.com/zqunor" class="social github" target="_blank" rel="external">
+          <span class="icon icon-github"></span>
+        </a>
+      
+        <a href="https://www.cnblogs.com/zqunor" class="social wikipedia" target="_blank" rel="external">
+          <span class="icon icon-wikipedia"></span>
+        </a>
+      
+        <a href="/atom.xml" class="social rss" target="_blank" rel="external">
+          <span class="icon icon-rss"></span>
+        </a>
+      
+    
+  </div>
+  <div>
+    Theme <a href="https://gitee.com/zqunor/material-z" class="codename">Material-Z</a>
+    Powered by <a href="https://blog.i2arch.tech/" target="_blank"> 程序小工 </a>.
+  </div>
+
+</footer>
+
+  <script>setLoadingBarProgress(80);</script>
+  
+
+    <script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/node-waves/0.7.5/waves.min.js"></script>
+    <script src="//cdn.bootcss.com/scrollReveal.js/3.3.2/scrollreveal.min.js"></script>
+    <script src="../../../../js/jquery.fitvids.js"></script>
+    <!-- <script src="../../../../js/jquery-awesome-cursor.min.js"></script> -->
+      <script>
+        var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+        var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+        var ALGOLIA_API_KEY = "";
+        var ALGOLIA_APP_ID = "";
+        var ALGOLIA_INDEX_NAME = "";
+        var AZURE_SERVICE_NAME = "";
+        var AZURE_INDEX_NAME = "";
+        var AZURE_QUERY_KEY = "";
+        var BAIDU_API_ID = "fca5b83cf69f752ddc96a61ef64a3659";
+        var SEARCH_SERVICE = "hexo";
+        var ROOT = "/" || "/";
+        if (!ROOT.endsWith('/')) ROOT += '/';
+      </script>
+      <script src="../../../../js/search.js"></script>
+        <script src="../../../../js/app.js"></script>
+  <script>setLoadingBarProgress(100);</script>
+</body>
+</html>

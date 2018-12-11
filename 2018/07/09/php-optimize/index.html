@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <title>PHP性能优化 | 程序小工</title>
+  <meta name="description" content="遇见更好的自己~">
+  <meta name="keywords" content="">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!-- <link rel="shortcut icon" href="../../../../img/favicon.ico"> -->
+  <link rel="shortcut icon" href="/img/favicon.ico">
+  <link rel="alternate" href="../../../../atom.xml" title="程序小工">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="PHP 运行环境的性能考虑在 php 深入学习中需要逐步强化意识，并着手实现，其中对于性能分析的相关工具也需要有一定的掌握，比如压力测试工具 Apache Benchmark，Opcode 代码分析工具 vld，PHP 性能分析工具 XHProf，另外，对于日常编写代码时，也需要考虑 PHP 自身的特性，进行扬长避短，使用 isset 而不用 array_key_exists 方法，以及尽可能规避">
+<meta name="keywords" content="optimize">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP性能优化">
+<meta property="og:url" content="https://blog.i2arch.tech/2018/07/09/php-optimize/index.html">
+<meta property="og:site_name" content="程序小工">
+<meta property="og:description" content="PHP 运行环境的性能考虑在 php 深入学习中需要逐步强化意识，并着手实现，其中对于性能分析的相关工具也需要有一定的掌握，比如压力测试工具 Apache Benchmark，Opcode 代码分析工具 vld，PHP 性能分析工具 XHProf，另外，对于日常编写代码时，也需要考虑 PHP 自身的特性，进行扬长避短，使用 isset 而不用 array_key_exists 方法，以及尽可能规避">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-16T12:14:52.003Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP性能优化">
+<meta name="twitter:description" content="PHP 运行环境的性能考虑在 php 深入学习中需要逐步强化意识，并着手实现，其中对于性能分析的相关工具也需要有一定的掌握，比如压力测试工具 Apache Benchmark，Opcode 代码分析工具 vld，PHP 性能分析工具 XHProf，另外，对于日常编写代码时，也需要考虑 PHP 自身的特性，进行扬长避短，使用 isset 而不用 array_key_exists 方法，以及尽可能规避">
+
+  <link href="https://fonts.googleapis.com/css?family=Inconsolata|Titillium+Web" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+  <link href="//cdn.bootcss.com/node-waves/0.7.5/waves.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../style.css">
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+</head>
+</html>
+<body>
+  <div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+
+
+  <script>setLoadingBarProgress(20)</script>
+  <header class="l_header">
+	<div class="wrapper">
+		<div class="nav-main container container--flex">
+			<a class="logo flat-box" href="../../../../index.html">
+				程序小工
+			</a>
+			<div class="menu">
+				<ul class="h-list">
+					
+						<li>
+							<a class="flat-box nav-home" href="../../../../index.html">
+								<i class="icon icon-home"></i>
+								首页
+							</a>
+						</li>
+					
+						<li>
+							<a class="flat-box nav-archives" href="../../../../archives">
+								<i class="icon icon-books"></i>
+								归档
+							</a>
+						</li>
+					
+						<li>
+							<a class="flat-box nav-about" href="../../../../about">
+								<i class="icon icon-local_library"></i>
+								关于
+							</a>
+						</li>
+					
+				</ul>
+				<div class="underline"></div>
+			</div>
+			
+				<div class="m_search">
+					<form name="searchform" class="form u-search-form">
+						<input type="text" class="input u-search-input" placeholder="Search">
+						<span class="icon icon-search"></span>
+					</form>
+				</div>
+			
+			<ul class="switcher h-list">
+				
+					<li class="s-search"><a href="javascript:void(0)"><span class="icon icon-search flat-box"></span></a></li>
+				
+				<li class="s-menu"><a href="javascript:void(0)"><span class="icon icon-menu flat-box"></span></a></li>
+			</ul>
+		</div>
+
+		<div class="nav-sub container container--flex">
+			<a class="logo flat-box" href="javascript:void(0)">
+				post article title
+			</a>
+
+			<ul class="switcher h-list">
+				<li class="s-comment"><a href="javascript:void(0)"><span class="icon icon-chat_bubble_outline flat-box"></span></a></li>
+				<li class="s-toc"><a href="javascript:void(0)"><span class="icon icon-format_list_numbered flat-box"></span></a></li>
+				<li class="s-top"><a href="javascript:void(0)"><span class="icon icon-arrow_upward flat-box"></span></a></li>
+			</ul>
+		</div>
+	</div>
+	<a href="https://github.com/zqunor" class="github-corner" aria-label="View source on Github">
+		<svg class="svg" viewbox="0 0 250 250" aria-hidden="true">
+		  <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+		  <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+		</svg>
+	  </a>
+</header>
+<aside class="menu-phone">
+	<nav>
+		
+			<a href="../../../../index.html" class="nav nav-home">
+				<i class="icon icon-home"></i>
+				首页
+			</a>
+		
+			<a href="../../../../archives" class="nav nav-archives">
+				<i class="icon icon-books"></i>
+				归档
+			</a>
+		
+			<a href="../../../../about" class="nav nav-about">
+				<i class="icon icon-local_library"></i>
+				关于
+			</a>
+		
+	</nav>
+</aside>
+
+    <script>setLoadingBarProgress(40);</script>
+  <div class="l_body">
+    <div class='container clearfix'>
+      <!-- 左侧内容 -->
+      <div class='l_main'>
+        <article id="post-php-optimize" class="post white-box article-type-post" itemscope="" itemprop="blogPost">
+	<section class="meta">
+
+	<h2 class="title">
+  	<a href="">
+    	PHP性能优化
+    </a>
+	</h2>
+
+	<div class="pagenav">
+		<time>
+			<i class="icon icon-event_available"></i>
+			2018-07-09
+		</time>
+
+		
+    
+    <div class="cats">
+        <i class="icon icon-folder-open"></i>
+        <a href="../../../../categories/PHP/">PHP</a>
+    </div>
+
+
+		<div class="pagetags">
+			<i class="icon icon-color-palette" style="margin-right: 2px;"></i>
+			
+				
+					<a href="../../../../tags/optimize/" style="margin-left: 3px;">
+						optimize
+					</a>
+				
+			
+		</div>
+	</div>
+	</section>
+
+	
+	<section class="toc-wrapper"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#php-性能优化"><span class="toc-text"> PHP 性能优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一-语言级性能优化一"><span class="toc-text"> 一、语言级性能优化(一)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1压力测试工具-apache-benchmark-ab"><span class="toc-text"> 1.压力测试工具 Apache Benchmark (ab)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1测试工具基本介绍"><span class="toc-text"> (1)测试工具基本介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2php-自身能力"><span class="toc-text"> 2.PHP 自身能力</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1优化点少写代码多用-php-自身能力"><span class="toc-text"> (1)优化点：少写代码，多用 PHP 自身能力</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2php-代码运行流程"><span class="toc-text"> (2)PHP 代码运行流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3php-内置函数之间的性能测试"><span class="toc-text"> (3)PHP 内置函数之间的性能测试</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二-语言级性能优化二"><span class="toc-text"> 二、语言级性能优化(二)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1优化点减少-php-魔法函数的使用"><span class="toc-text"> 1.优化点：减少 PHP 魔法函数的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-情况描述"><span class="toc-text"> (1). 情况描述：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-为什么性能低"><span class="toc-text"> (2). 为什么性能低：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-好的方法"><span class="toc-text"> (3). 好的方法：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2优化点-产生额外开销的错误抑制符"><span class="toc-text"> 2.优化点： 产生额外开销的错误抑制符 @</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1情况描述"><span class="toc-text"> (1).情况描述：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-的实际逻辑"><span class="toc-text"> (2). @ 的实际逻辑：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3错误抑制符的性能测试"><span class="toc-text"> (3).错误抑制符的性能测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4好的建议尽量不要使用错误抑制符"><span class="toc-text"> (4).好的建议：尽量不要使用@错误抑制符</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3优化点-合理使用内存"><span class="toc-text"> 3.优化点： 合理使用内存</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1情况描述-2"><span class="toc-text"> (1)情况描述：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2好的建议"><span class="toc-text"> (2)好的建议：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4优化点-尽量少的使用正则表达式"><span class="toc-text"> 4.优化点： 尽量少的使用正则表达式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-情况描述-2"><span class="toc-text"> (1) 情况描述：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-好的建议"><span class="toc-text"> (2) 好的建议：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5优化点避免在循环内做运算"><span class="toc-text"> 5.优化点：避免在循环内做运算</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-情况描述-3"><span class="toc-text"> (1) 情况描述：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-代码示例"><span class="toc-text"> (2) 代码示例：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6优化点-减少计算密集型业务"><span class="toc-text"> 6.优化点： 减少计算密集型业务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-情况描述-4"><span class="toc-text"> (1) 情况描述：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-为什么"><span class="toc-text"> (2) 为什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-php-适用场景"><span class="toc-text"> (3) PHP 适用场景：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7优化点-务必适用带引号字符串做键值"><span class="toc-text"> 7.优化点： 务必适用带引号字符串做键值</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-情况描述-5"><span class="toc-text"> (1) 情况描述：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-程序说明"><span class="toc-text"> (2) 程序说明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-好的建议"><span class="toc-text"> (3) 好的建议：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三-php-周边问题的分析与阐述"><span class="toc-text"> 三、PHP 周边问题的分析与阐述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1php-周边范围"><span class="toc-text"> 1.PHP 周边范围：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2php-周边对-php-程序的影响分析"><span class="toc-text"> 2.PHP 周边对 PHP 程序的影响分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-连接数据库操作"><span class="toc-text"> (1) 连接数据库操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-减少文件类操作"><span class="toc-text"> (2) 减少文件类操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-优化网络请求"><span class="toc-text"> (3) 优化网络请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-压缩-php-接口输出"><span class="toc-text"> (4) 压缩 PHP 接口输出</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-php-缓存复用"><span class="toc-text"> (5) PHP 缓存复用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-重叠时间窗口思想"><span class="toc-text"> (6) 重叠时间窗口思想</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-php-旁路处理方案"><span class="toc-text"> (7) PHP 旁路处理方案</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#四-具体的性能分析"><span class="toc-text"> 四、具体的性能分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-借助-xhprof-工具分析-php-性能"><span class="toc-text"> 1. 借助 xhprof 工具分析 PHP 性能</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1准备工作"><span class="toc-text"> (1)准备工作</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-php-性能分析工具扩展"><span class="toc-text"> 2. PHP 性能分析工具扩展</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#五-php-性能瓶颈终极办法"><span class="toc-text"> 五、PHP 性能瓶颈终极办法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1opcode-cache-php-扩展apc"><span class="toc-text"> 1.Opcode Cache: PHP 扩展APC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2扩展实现通过-php-扩展代替原-php-代码中高频逻辑"><span class="toc-text"> 2.扩展实现：通过 PHP 扩展代替原 PHP 代码中高频逻辑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3runtime-优化-hhvm"><span class="toc-text"> 3.Runtime 优化： HHVM</span></a></li></ol></li></ol></li></ol></section>
+	
+
+	<section class="article typo">
+		<div class="article-entry" itemprop="articleBody">
+			<i class="icon icon-lamp"></i>
+			<span class="zhaiyao">摘要</span>
+		<p>PHP 运行环境的性能考虑在 php 深入学习中需要逐步强化意识，并着手实现，其中对于性能分析的相关工具也需要有一定的掌握，比如压力测试工具 Apache Benchmark，Opcode 代码分析工具 vld，PHP 性能分析工具 XHProf，另外，对于日常编写代码时，也需要考虑 PHP 自身的特性，进行扬长避短，使用 isset 而不用 array_key_exists 方法，以及尽可能规避 PHP 自带的魔术方法。对 PHP 的运行流程也需要有一个大致的了解，知道 Opcode 在 PHP 执行过程中的阶段。需要逐渐加深对 PHP 深层次的思考。</p>
+<a id="more"></a>
+<h1 id="php-性能优化"><a class="markdownIt-Anchor" href="#php-性能优化"></a> PHP 性能优化</h1>
+<h2 id="一-语言级性能优化一"><a class="markdownIt-Anchor" href="#一-语言级性能优化一"></a> 一、语言级性能优化(一)</h2>
+<p>PHP 性能问题的解决方向</p>
+<pre><code>PHP语言级别的性能优化 =》 PHP周边问题的性能优化 =》 PHP语言自身分析、优化
+</code></pre>
+<h3 id="1压力测试工具-apache-benchmark-ab"><a class="markdownIt-Anchor" href="#1压力测试工具-apache-benchmark-ab"></a> 1.压力测试工具 Apache Benchmark (ab)</h3>
+<h4 id="1测试工具基本介绍"><a class="markdownIt-Anchor" href="#1测试工具基本介绍"></a> (1)测试工具基本介绍</h4>
+<p>1). ab 是由 Apache 提供的压力测试软件，安装 apache 服务器时会自带该压力测试软件</p>
+<p>2). 基本使用[Linux 平台]</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">./ab -n1000 -c100 http://www.baidu.com/</span><br><span class="line"></span><br><span class="line"><span class="comment"># -n 请求数</span></span><br><span class="line"><span class="comment"># -c 并发数</span></span><br><span class="line"><span class="comment"># url 目标压力测试地址</span></span><br></pre></td></tr></table></figure>
+<p>3). 参考项</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 每秒接收请求数 =》 尽可能大</span></span><br><span class="line">Requests per second (mean)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 每一个请求的耗时情况 =》 尽可能小</span></span><br><span class="line">Time per request (mean, across all concurrent requests)</span><br></pre></td></tr></table></figure>
+<h3 id="2php-自身能力"><a class="markdownIt-Anchor" href="#2php-自身能力"></a> 2.PHP 自身能力</h3>
+<h4 id="1优化点少写代码多用-php-自身能力"><a class="markdownIt-Anchor" href="#1优化点少写代码多用-php-自身能力"></a> (1)优化点：少写代码，多用 PHP 自身能力</h4>
+<p>1). 性能问题：自身代码冗余较多，可读性不佳，并且性能低。</p>
+<p>2). 为什么性能低：PHP 代码需要编译解释为底层语言，这一过程每次请求都会处理一遍，开销大。</p>
+<p>3). 好的方法：多实用 PHP 内置变量、常量、函数。</p>
+<h4 id="2php-代码运行流程"><a class="markdownIt-Anchor" href="#2php-代码运行流程"></a> (2)PHP 代码运行流程</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.php文件 =&gt;[zend引擎 Scanner]=&gt; zend exprs =&gt; [Parser] =&gt; Opcodes(要被执行的代码) =&gt; [Exec] =&gt; Output</span><br></pre></td></tr></table></figure>
+<p>【补充】目前很多 php 的缓存服务使用的都是 opcode，节省了扫描和解析的过程，提升速度。</p>
+<h4 id="3php-内置函数之间的性能测试"><a class="markdownIt-Anchor" href="#3php-内置函数之间的性能测试"></a> (3)PHP 内置函数之间的性能测试</h4>
+<p>1). <code>array_key_exists()</code> vs <code>isset()</code></p>
+<p>php 执行效率上： isset &gt; array_key_exists</p>
+<blockquote>
+<p>【插曲】：在接触的项目中，大多数情况下确实使用的也是 isset()，但是记得某次看到同事写的代码中有 array_key_exists()方法时，自己查看了手册，确认了这个方法的使用方法后，还特地将 isset 换成 array_key_exists 方法进行编写代码，粗浅的认为 array_key_exists()方法要比 isset()方法高级，学习了性能分析之后，顿时觉得之前的认识很是浅陋，也意识到项目中之所有 isset()更为常见是合理的。</p>
+</blockquote>
+<h2 id="二-语言级性能优化二"><a class="markdownIt-Anchor" href="#二-语言级性能优化二"></a> 二、语言级性能优化(二)</h2>
+<h3 id="1优化点减少-php-魔法函数的使用"><a class="markdownIt-Anchor" href="#1优化点减少-php-魔法函数的使用"></a> 1.优化点：减少 PHP 魔法函数的使用</h3>
+<h4 id="1-情况描述"><a class="markdownIt-Anchor" href="#1-情况描述"></a> (1). 情况描述：</h4>
+<p>PHP 提供的魔法函数，性能不佳</p>
+<h4 id="2-为什么性能低"><a class="markdownIt-Anchor" href="#2-为什么性能低"></a> (2). 为什么性能低：</h4>
+<p>为了给 PHP 程序员省事，PHP 语言为你做了很多</p>
+<h4 id="3-好的方法"><a class="markdownIt-Anchor" href="#3-好的方法"></a> (3). 好的方法：</h4>
+<p>尽可能规避使用 PHP 魔法函数</p>
+<p>【补充】：命令行模式查看 php 文件执行耗时</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># time命令</span></span><br><span class="line">time php test.php</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出结果</span></span><br><span class="line">real</span><br><span class="line">user =&gt; 主要参考的耗时</span><br><span class="line">sys</span><br></pre></td></tr></table></figure>
+<h3 id="2优化点-产生额外开销的错误抑制符"><a class="markdownIt-Anchor" href="#2优化点-产生额外开销的错误抑制符"></a> 2.优化点： 产生额外开销的错误抑制符 <code>@</code></h3>
+<h4 id="1情况描述"><a class="markdownIt-Anchor" href="#1情况描述"></a> (1).情况描述：</h4>
+<p>PHP 提供的错误已支付只是为了方便懒人</p>
+<h4 id="2-的实际逻辑"><a class="markdownIt-Anchor" href="#2-的实际逻辑"></a> (2). <code>@</code> 的实际逻辑：</h4>
+<p>在代码开始前、结束后，增加 Opcode，忽略报错<br>
+vld - PHP Opcode 查看扩展</p>
+<h4 id="3错误抑制符的性能测试"><a class="markdownIt-Anchor" href="#3错误抑制符的性能测试"></a> (3).错误抑制符的性能测试</h4>
+<p>1)测试文件<code>at.php</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//at.php</span></span><br><span class="line">file_get_contens(<span class="string">'xxx'</span>); <span class="comment">// xxx文件不存在</span></span><br></pre></td></tr></table></figure>
+<p>2)使用 vld 扩展执行<code>at.php</code>，查看执行过程的完整 Opcode</p>
+<p><code>php -dvld.active=1 -dvld.execute=0 at.php</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 不加@错误抑制符时Opcode的执行情况</span></span><br><span class="line">SEND_VAL</span><br><span class="line">DO_FCALL</span><br><span class="line">RETURN</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加@错误抑制符时Opcode的执行情况</span></span><br><span class="line">BEGIN_SILENCE</span><br><span class="line">SEND_VAL</span><br><span class="line">DO_FCALL</span><br><span class="line">END_SILENCE</span><br><span class="line">RETURN</span><br></pre></td></tr></table></figure>
+<h4 id="4好的建议尽量不要使用错误抑制符"><a class="markdownIt-Anchor" href="#4好的建议尽量不要使用错误抑制符"></a> (4).好的建议：尽量不要使用@错误抑制符</h4>
+<p>可以使用 try throw 方式进行错误控制</p>
+<h3 id="3优化点-合理使用内存"><a class="markdownIt-Anchor" href="#3优化点-合理使用内存"></a> 3.优化点： 合理使用内存</h3>
+<h4 id="1情况描述-2"><a class="markdownIt-Anchor" href="#1情况描述-2"></a> (1)情况描述：</h4>
+<p>PHP 有内存回收机制保底，但也要小心使用内存</p>
+<h4 id="2好的建议"><a class="markdownIt-Anchor" href="#2好的建议"></a> (2)好的建议：</h4>
+<p>利用 unset()及时释放不使用的内存[注：unset()出现注销不掉的情况]</p>
+<h3 id="4优化点-尽量少的使用正则表达式"><a class="markdownIt-Anchor" href="#4优化点-尽量少的使用正则表达式"></a> 4.优化点： 尽量少的使用正则表达式</h3>
+<h4 id="1-情况描述-2"><a class="markdownIt-Anchor" href="#1-情况描述-2"></a> (1) 情况描述：</h4>
+<p>正则表达式的回溯开销比较大，“没有金刚钻别揽瓷器活”</p>
+<h4 id="2-好的建议"><a class="markdownIt-Anchor" href="#2-好的建议"></a> (2) 好的建议：</h4>
+<p>利用字符串处理函数，实现相同逻辑</p>
+<h3 id="5优化点避免在循环内做运算"><a class="markdownIt-Anchor" href="#5优化点避免在循环内做运算"></a> 5.优化点：避免在循环内做运算</h3>
+<h4 id="1-情况描述-3"><a class="markdownIt-Anchor" href="#1-情况描述-3"></a> (1) 情况描述：</h4>
+<p>循环内的计算式将会被重复计算</p>
+<h4 id="2-代码示例"><a class="markdownIt-Anchor" href="#2-代码示例"></a> (2) 代码示例：</h4>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$str = <span class="string">"hello world"</span>;</span><br><span class="line"><span class="keyword">for</span> ($i=<span class="number">0</span>; $i &lt; strlen($str); $i++) &#123;</span><br><span class="line">    <span class="comment"># code...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 其中strlen()方法会在每次循环时计算一次</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 进行优化</span></span><br><span class="line">$str = <span class="string">"hello world"</span>;</span><br><span class="line">$strlen = strlen($str);</span><br><span class="line"><span class="keyword">for</span> ($i=<span class="number">0</span>; $i &lt; $strlen; $i++) &#123;</span><br><span class="line">    <span class="comment"># code...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="6优化点-减少计算密集型业务"><a class="markdownIt-Anchor" href="#6优化点-减少计算密集型业务"></a> 6.优化点： 减少计算密集型业务</h3>
+<h4 id="1-情况描述-4"><a class="markdownIt-Anchor" href="#1-情况描述-4"></a> (1) 情况描述：</h4>
+<p>PHP 不适合密集型运算的场景[大批量日志分析、大批量数据处理]</p>
+<h4 id="2-为什么"><a class="markdownIt-Anchor" href="#2-为什么"></a> (2) 为什么？</h4>
+<p>PHP 语言特性决定了 PHP 不适合做大数据量运算。[需要解析成 C 语言进行运算，C 语言可能几行代码就实现的计算，php 可能需要很多行代码才能实现]</p>
+<h4 id="3-php-适用场景"><a class="markdownIt-Anchor" href="#3-php-适用场景"></a> (3) PHP 适用场景：</h4>
+<p>适合衔接 Webserver 与后端服务、UI 呈现[纽带]</p>
+<h3 id="7优化点-务必适用带引号字符串做键值"><a class="markdownIt-Anchor" href="#7优化点-务必适用带引号字符串做键值"></a> 7.优化点： 务必适用带引号字符串做键值</h3>
+<h4 id="1-情况描述-5"><a class="markdownIt-Anchor" href="#1-情况描述-5"></a> (1) 情况描述：</h4>
+<p>PHP 会将没有引号的键值当做常量，产生查找常量的开销</p>
+<p>【补充】：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将后台运行的任务放到前台终端运行</span></span><br><span class="line"><span class="built_in">fg</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 相关命令： jobs  bg  fg</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将任务号为1的任务从后台执行转换到其那台执行。</span></span><br><span class="line"><span class="built_in">fg</span> 1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行上述命令后，命令行窗口将显示如下信息</span></span><br><span class="line">find / -name password</span><br></pre></td></tr></table></figure>
+<h4 id="2-程序说明"><a class="markdownIt-Anchor" href="#2-程序说明"></a> (2) 程序说明</h4>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">define(<span class="string">'key'</span>, <span class="string">'imooc'</span>);</span><br><span class="line"></span><br><span class="line">$array = <span class="keyword">array</span>(</span><br><span class="line">    <span class="string">'key'</span> =&gt; <span class="string">'hello world!'</span>,</span><br><span class="line">    <span class="string">'imooc'</span> =&gt; <span class="string">'http://www.imooc.com/'</span></span><br><span class="line">);</span><br><span class="line"><span class="keyword">echo</span> $array[<span class="string">"key"</span>] . <span class="string">'\n'</span>; <span class="comment">// 输出 hello world</span></span><br><span class="line"><span class="keyword">echo</span> $array[key] . <span class="string">'\n'</span>; <span class="comment">// 输出 http://www.imooc.com/</span></span><br></pre></td></tr></table></figure>
+<p>【说明】：</p>
+<p>当时用<code>$array[key]</code>时，程序也把 key 作为常量去查找，当查找到时，获取到常量的值；当没查找到时，再到数组内部，将其作为键 key 字符串进行解析</p>
+<h4 id="3-好的建议"><a class="markdownIt-Anchor" href="#3-好的建议"></a> (3) 好的建议：</h4>
+<p>严格使用引号作为键值</p>
+<h2 id="三-php-周边问题的分析与阐述"><a class="markdownIt-Anchor" href="#三-php-周边问题的分析与阐述"></a> 三、PHP 周边问题的分析与阐述</h2>
+<h3 id="1php-周边范围"><a class="markdownIt-Anchor" href="#1php-周边范围"></a> 1.PHP 周边范围：</h3>
+<p>Linux 运行环境</p>
+<p>文件存储[磁盘]</p>
+<p>数据库[mysql]</p>
+<p>缓存[硬件的内存、php 缓存技术：memcache redis]</p>
+<p>网络</p>
+<h3 id="2php-周边对-php-程序的影响分析"><a class="markdownIt-Anchor" href="#2php-周边对-php-程序的影响分析"></a> 2.PHP 周边对 PHP 程序的影响分析</h3>
+<h4 id="1-连接数据库操作"><a class="markdownIt-Anchor" href="#1-连接数据库操作"></a> (1) 连接数据库操作</h4>
+<p>1） 同一台服务器 =&gt; 数据库优化 决定时间性能</p>
+<p>2） 分布式服务器 =&gt; 数据库优化 + 网络速度 决定时间性能</p>
+<h4 id="2-减少文件类操作"><a class="markdownIt-Anchor" href="#2-减少文件类操作"></a> (2) 减少文件类操作</h4>
+<p>1） 常见 PHP 场景的开销次序：</p>
+<p>读写磁盘、 读写数据库、读写内存、读写网络数据</p>
+<p>2） 时间开销：</p>
+<pre><code>    读写内存 &lt;&lt;(远小于) 读写数据库[基于文件系统，操作本地磁盘] &lt;(小于) 读写磁盘 &lt; 读写网络数据
+
+    数据库会使用内存作为缓存，将其热数据先缓存在内存中，异步地写入到数据库 =》 数据库介于内存和磁盘之间
+
+    网络数据：通过socket发起，socket使用的是本地的文件句柄，磁盘操作。受网络延迟影响，延迟大时远远小于读写磁盘，延迟小时和读写磁盘差不多。
+</code></pre>
+<p>3） 总结：</p>
+<p>尽可能多的使用读写数据库、读写内存，尽量规避操作磁盘和操作网络数据。</p>
+<h4 id="3-优化网络请求"><a class="markdownIt-Anchor" href="#3-优化网络请求"></a> (3) 优化网络请求</h4>
+<p>网络请求的坑：</p>
+<p>1.对方接口的不确定因素 2.网络稳定性</p>
+<p>如何优化网络请求？</p>
+<p>1.设置超时时间<br>
+a) 连接超时<br>
+b) 读超时<br>
+c) 写超时</p>
+<p>2.将串行请求并行化<br>
+a) 使用 curl<em>multi</em>*() =&gt; 最简单，但是并不是最好用<br>
+b) 使用 swoole 扩展 =&gt; 效果更好</p>
+<h4 id="4-压缩-php-接口输出"><a class="markdownIt-Anchor" href="#4-压缩-php-接口输出"></a> (4) 压缩 PHP 接口输出</h4>
+<p>1） 如何压缩？</p>
+<p>使用 Gzip 即可。</p>
+<p>2） 利与弊：<br>
+利： 利于我们的数据输出，Client 端能更快获取数据<br>
+弊： 额外的 CPU 开销</p>
+<h4 id="5-php-缓存复用"><a class="markdownIt-Anchor" href="#5-php-缓存复用"></a> (5) PHP 缓存复用</h4>
+<p>1）什么情况下做输出内容的缓存？</p>
+<p>多次请求，内容不变的情况。[模板缓存]</p>
+<pre><code>      |---Cached----/\
+     \/              |
+    .php &lt;-------&gt; Cache -&gt; No Cache
+                    /\          |
+                     |---------\/
+</code></pre>
+<h4 id="6-重叠时间窗口思想"><a class="markdownIt-Anchor" href="#6-重叠时间窗口思想"></a> (6) 重叠时间窗口思想</h4>
+<p>串行：</p>
+<pre><code>process1[客户端]  process2[web server]  process3[php]  process4[mysql或缓存]
+</code></pre>
+<p>重叠时间窗口：</p>
+<pre><code>process1
+    process2
+        process3
+            process4
+</code></pre>
+<p>使用前提：后一个任务不强依赖于前一个任务的输出或返回。</p>
+<h4 id="7-php-旁路处理方案"><a class="markdownIt-Anchor" href="#7-php-旁路处理方案"></a> (7) PHP 旁路处理方案</h4>
+<pre><code>x.php                         x.php
+  |                             |
+process1                      process1
+  |                             |---------process2
+process2                      process3       |
+  |                             |&lt;------------
+process3                      process4
+  |
+process4
+</code></pre>
+<p>使用前提：后一个任务不强依赖于前一个任务的输出或返回。</p>
+<h2 id="四-具体的性能分析"><a class="markdownIt-Anchor" href="#四-具体的性能分析"></a> 四、具体的性能分析</h2>
+<h3 id="1-借助-xhprof-工具分析-php-性能"><a class="markdownIt-Anchor" href="#1-借助-xhprof-工具分析-php-性能"></a> 1. 借助 xhprof 工具分析 PHP 性能</h3>
+<p>工具： XHProf [源自 Facebook 的 PHP 性能分析工具]</p>
+<p>实践： 分析 Wordpress 程序，做优化</p>
+<h4 id="1准备工作"><a class="markdownIt-Anchor" href="#1准备工作"></a> (1)准备工作</h4>
+<p>1） 检查 xhprof 工具是否安装成功</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">php --ri xhprof</span><br><span class="line"></span><br><span class="line">//输出</span><br><span class="line">xhprof</span><br><span class="line">xhprof =&gt; 0.9.2</span><br><span class="line">CPU num =&gt; 1</span><br></pre></td></tr></table></figure>
+<p>2） 在 wordpress 代码中[index.php 文件]</p>
+<pre><code>1.在起始位置添加`xhprof_enable()`进行开启xhprof
+
+2.在执行结束位置添加`xhprof_disable()`返回性能分析数据
+
+3.添加xhprof的两个lib文件
+</code></pre>
+<p>wordpress/index.php 代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">xhprof_enable();</span><br><span class="line"></span><br><span class="line">define(<span class="string">'WP_USE_THEMES'</span>, <span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">require</span>(dirname(<span class="keyword">__FILE__</span>) . <span class="string">'/wp-blog-header.php'</span>);</span><br><span class="line"></span><br><span class="line">$data = xhprof_disable();</span><br><span class="line"></span><br><span class="line"><span class="keyword">include_once</span> <span class="string">"/var/www/html/xhprof_lib/utils/xhprof_lib.php"</span>;</span><br><span class="line"><span class="keyword">include_once</span> <span class="string">"/var/www/html/xhprof_lib/utils/xhprof_runs.php"</span>;</span><br><span class="line"></span><br><span class="line">$objXhprofRun = <span class="keyword">new</span> XHProfRuns_Default();</span><br><span class="line">$run_id = $objXhprofRun-&gt;save_run($data, <span class="string">"test"</span>);</span><br><span class="line">var_dump($run_id);</span><br></pre></td></tr></table></figure>
+<p>3） wordpress 同级目录下的 xhp 目录</p>
+<pre><code>callgraph.php
+css/
+docs/
+index.php
+jquery/
+js/
+typeahead.php
+</code></pre>
+<p>4）浏览器访问 xhp/index.php</p>
+<pre><code>查看列表形式的性能分析 =》 View Full Callgraph =》 查看图形流程分析[查看耗时最长的文件和方法]=&gt;MO::import_from_reader| MO::make_entry
+</code></pre>
+<p>5）查找最需要优化的文件</p>
+<p><code>grep 'import_from_reader' ./ -r</code></p>
+<p>6）主要耗时点：<code>MO::make_entry()</code> – 执行的是多语言支持的功能</p>
+<p>优化方式：直接注释掉调用的相关代码</p>
+<p>【补充】：<code>MO</code>和<code>PO</code>都是 PHP 处理多语言程序的语言包</p>
+<p>7）优化结果：</p>
+<p>让程序不再是只有一个或一处相互关联的高消耗代码点。</p>
+<h3 id="2-php-性能分析工具扩展"><a class="markdownIt-Anchor" href="#2-php-性能分析工具扩展"></a> 2. PHP 性能分析工具扩展</h3>
+<p>XHProf – PHP 性能分析工具</p>
+<p>ab – 压力测试</p>
+<p>vld – opcode 代码分析</p>
+<h2 id="五-php-性能瓶颈终极办法"><a class="markdownIt-Anchor" href="#五-php-性能瓶颈终极办法"></a> 五、PHP 性能瓶颈终极办法</h2>
+<h3 id="1opcode-cache-php-扩展apc"><a class="markdownIt-Anchor" href="#1opcode-cache-php-扩展apc"></a> 1.Opcode Cache: PHP 扩展<code>APC</code></h3>
+<p>官方地址：<a href="http://pecl.php.net/package-search.php?pkg_name=apc&amp;bool=AND&amp;submit=Search" target="_blank" rel="noopener">前往</a></p>
+<p>已不再更新。</p>
+<p>【补充】：<code>pecl.php.net</code>是 php 扩展的官方维护站点。了解并使用<a href="http://pecl.php.net/packages.php?catpid=3&amp;catname=Caching" target="_blank" rel="noopener">类似 APC 的 opcode 缓存扩展</a>？</p>
+<p>yac - 通过共享内存来缓存用户数据，用于代替 APC 和本地 memcached 的方案。</p>
+<h3 id="2扩展实现通过-php-扩展代替原-php-代码中高频逻辑"><a class="markdownIt-Anchor" href="#2扩展实现通过-php-扩展代替原-php-代码中高频逻辑"></a> 2.扩展实现：通过 PHP 扩展代替原 PHP 代码中高频逻辑</h3>
+<h3 id="3runtime-优化-hhvm"><a class="markdownIt-Anchor" href="#3runtime-优化-hhvm"></a> 3.Runtime 优化： HHVM</h3>
+
+	</div>
+	
+		<blockquote class="post-announce">
+			<ul>
+				<li>版权声明:  感谢您的阅读，本文由<a href="/">程序小工</a>版权所有。如若转载，请注明出处。</li>
+				<li>文章标题: <span class"title"="">PHP性能优化</span></li>
+				<li>文章链接: <a href="">https://blog.i2arch.tech2018/07/09/php-optimize/</a></li>
+			</ul>
+		</blockquote>
+	  
+
+		
+			<div class="art-item-footer">
+				<span class="art-item-right">
+					上一篇:
+					
+						<a href="../../11/php-practice-wx-tp5-3/" rel="prev" title="【实战】Tp5+小程序(三)--微信登录与令牌">
+							【实战】Tp5+小程序(三)--微信登录与令牌
+							<i class="icon icon-chevron-thin-right"></i>
+						</a>
+					
+				</span>
+				<br>
+				<span class="art-item-right">
+					下一篇:
+					
+						<a href="../../07/web-goserver/" rel="next" title="【Linux】网站上线">
+							【Linux】网站上线
+							<i class="icon icon-chevron-thin-right"></i>
+						</a>
+					
+				</span>
+			</div>
+		
+
+		
+			
+
+    <div class="recommended_posts">
+        <h3>
+            <i class="icon icon-book1"></i>
+            推荐文章
+        </h3>
+        <ul>
+            
+                <li>
+                    <i class="icon icon-point-right"></i>
+                    <a href="https://blog.i2arch.tech/2018/07/28/summary-monthly4/">
+                        【总结】四个月的工作任务总结
+                    </a>
+                </li>
+            
+                <li>
+                    <i class="icon icon-point-right"></i>
+                    <a href="https://blog.i2arch.tech/2018/07/11/php-practice-wx-tp5-3/">
+                        【实战】Tp5+小程序(三)--微信登录与令牌
+                    </a>
+                </li>
+            
+                <li>
+                    <i class="icon icon-point-right"></i>
+                    <a href="https://blog.i2arch.tech/2018/07/07/web-goserver/">
+                        【Linux】网站上线
+                    </a>
+                </li>
+            
+                <li>
+                    <i class="icon icon-point-right"></i>
+                    <a href="https://blog.i2arch.tech/2018/07/06/linux-crontab/">
+                        【Linux】系统学习Crontab定时任务
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+		
+		<div class="gotop">
+			    <a href="javascript:void(0)">
+        <i class="icon icon-rocket flat-box"></i>
+    </a>
+
+		</div>
+	</section>
+
+	
+
+</article>
+<script>
+	window.subData = {
+		title: 'PHP性能优化',
+		tools: true
+	}
+</script>
+
+      </div>
+
+      <!-- 右侧边栏组件 -->
+      <aside class='l_side'>
+        
+
+
+
+
+
+
+
+      </aside>
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+  </div>
+  <footer id="footer" class="clearfix">
+
+	<div class="social-wrapper">
+  	
+      
+        <a href="https://github.com/zqunor" class="social github" target="_blank" rel="external">
+          <span class="icon icon-github"></span>
+        </a>
+      
+        <a href="https://www.cnblogs.com/zqunor" class="social wikipedia" target="_blank" rel="external">
+          <span class="icon icon-wikipedia"></span>
+        </a>
+      
+        <a href="/atom.xml" class="social rss" target="_blank" rel="external">
+          <span class="icon icon-rss"></span>
+        </a>
+      
+    
+  </div>
+  <div>
+    Theme <a href="https://gitee.com/zqunor/material-z" class="codename">Material-Z</a>
+    Powered by <a href="https://blog.i2arch.tech/" target="_blank"> 程序小工 </a>.
+  </div>
+
+</footer>
+
+  <script>setLoadingBarProgress(80);</script>
+  
+
+    <script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/node-waves/0.7.5/waves.min.js"></script>
+    <script src="//cdn.bootcss.com/scrollReveal.js/3.3.2/scrollreveal.min.js"></script>
+    <script src="../../../../js/jquery.fitvids.js"></script>
+    <!-- <script src="../../../../js/jquery-awesome-cursor.min.js"></script> -->
+      <script>
+        var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+        var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+        var ALGOLIA_API_KEY = "";
+        var ALGOLIA_APP_ID = "";
+        var ALGOLIA_INDEX_NAME = "";
+        var AZURE_SERVICE_NAME = "";
+        var AZURE_INDEX_NAME = "";
+        var AZURE_QUERY_KEY = "";
+        var BAIDU_API_ID = "fca5b83cf69f752ddc96a61ef64a3659";
+        var SEARCH_SERVICE = "hexo";
+        var ROOT = "/" || "/";
+        if (!ROOT.endsWith('/')) ROOT += '/';
+      </script>
+      <script src="../../../../js/search.js"></script>
+        <script src="../../../../js/app.js"></script>
+  <script>setLoadingBarProgress(100);</script>
+</body>
+</html>
