@@ -13,18 +13,20 @@
   <link rel="shortcut icon" href="/img/favicon.ico">
   <link rel="alternate" href="../../../../atom.xml" title="程序小工">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="作为学习数据分析的工具，前期准备。">
+  <meta name="description" content="拓展自己对语言的认识和理解，开始学点其他的语言，不给自己的技术栈设限，有更多的思考和认识。学习python, 了解些机器学习，人工智能方面的知识，希望自己可以坚持深入学习。">
 <meta name="keywords" content="python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Python】安装与配置">
 <meta property="og:url" content="https://blog.i2arch.tech/2018/07/30/python-base/index.html">
 <meta property="og:site_name" content="程序小工">
-<meta property="og:description" content="作为学习数据分析的工具，前期准备。">
+<meta property="og:description" content="拓展自己对语言的认识和理解，开始学点其他的语言，不给自己的技术栈设限，有更多的思考和认识。学习python, 了解些机器学习，人工智能方面的知识，希望自己可以坚持深入学习。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-16T12:14:52.064Z">
+<meta property="og:image" content="https://ws1.sinaimg.cn/mw690/005EgYNMly1g2ynt37gvzj30i102vmx4.jpg">
+<meta property="og:updated_time" content="2019-05-12T16:01:12.501Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Python】安装与配置">
-<meta name="twitter:description" content="作为学习数据分析的工具，前期准备。">
+<meta name="twitter:description" content="拓展自己对语言的认识和理解，开始学点其他的语言，不给自己的技术栈设限，有更多的思考和认识。学习python, 了解些机器学习，人工智能方面的知识，希望自己可以坚持深入学习。">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/mw690/005EgYNMly1g2ynt37gvzj30i102vmx4.jpg">
 
   <link href="https://fonts.googleapis.com/css?family=Inconsolata|Titillium+Web" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
@@ -157,7 +159,7 @@
     
     <div class="cats">
         <i class="icon icon-folder-open"></i>
-        <a href="../../../../categories/Python/">Python</a>
+        <a href="../../../../categories/【Python相关】/">【Python相关】</a>
     </div>
 
 
@@ -175,18 +177,52 @@
 	</section>
 
 	
-	<section class="toc-wrapper"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#环境搭建"><span class="toc-text"> 环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一-windows-平台"><span class="toc-text"> 一、Windows 平台</span></a></li></ol></li></ol></section>
+	<section class="toc-wrapper"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#下载安装"><span class="toc-text"> 下载安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#将默认的python27换成新版python37"><span class="toc-text"> 将默认的python2.7换成新版python3.7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#操作遇到的问题"><span class="toc-text"> 操作遇到的问题：</span></a></li></ol></section>
 	
 
 	<section class="article typo">
 		<div class="article-entry" itemprop="articleBody">
 			<i class="icon icon-lamp"></i>
 			<span class="zhaiyao">摘要</span>
-		<p>作为学习数据分析的工具，前期准备。</p>
+		<p>拓展自己对语言的认识和理解，开始学点其他的语言，不给自己的技术栈设限，有更多的思考和认识。学习python, 了解些机器学习，人工智能方面的知识，希望自己可以坚持深入学习。</p>
 <a id="more"></a>
-<h2 id="环境搭建"><a class="markdownIt-Anchor" href="#环境搭建"></a> 环境搭建</h2>
-<h3 id="一-windows-平台"><a class="markdownIt-Anchor" href="#一-windows-平台"></a> 一、Windows 平台</h3>
-<p>占位</p>
+<h2 id="下载安装"><a class="markdownIt-Anchor" href="#下载安装"></a> 下载安装</h2>
+<p>1、下载源码包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.python.org/ftp/python/3.7.0/Python-3.7.0.tgz</span><br></pre></td></tr></table></figure>
+<p>2、解压缩：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf Python-3.7.0.tgz</span><br></pre></td></tr></table></figure>
+<p>然后进入到解压缩后的目录<code>cd Python-3.7.0</code></p>
+<p>3、安装配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/usr/<span class="built_in">local</span>/python37/</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>–prefix 是指定安装目录</p>
+</blockquote>
+<blockquote>
+<p>执行前确保系统已安装了编译器gcc <code>sudo yum install -y make gcc gcc-c++</code></p>
+</blockquote>
+<p>4、编译，并安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+<h2 id="将默认的python27换成新版python37"><a class="markdownIt-Anchor" href="#将默认的python27换成新版python37"></a> 将默认的python2.7换成新版python3.7</h2>
+<p>(1) 查看当前系统python执行程序的位置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">locate */bin/python</span><br></pre></td></tr></table></figure>
+<p>定位到加载的python目录是<code>/usr/bin/python</code></p>
+<p>(2) 查看环境变量的值<code>$PATH</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="variable">$PATH</span></span><br></pre></td></tr></table></figure>
+<p>有一行是<code>/usr/bin</code>, 说明直接运行的是<code>/usr/bin/python</code>， 并且当前<code>/usr/bin/python</code>是软连接到<code>/usr/bin/python2.7</code>的</p>
+<p>(3) 建立新的软连接</p>
+<p>使<code>/usr/bin/python</code>指向<code>/usr/local/python37/bin/python3.7</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -sb /usr/<span class="built_in">local</span>/python37/bin/python3.7 /usr/bin/python</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>-s: 表示建立的是软连接（快捷方式指向），不加表示是硬连接（即复制一份的）<br>
+-b：表示删除、覆盖以前建立的链接</p>
+</blockquote>
+<p>参考: <a href="https://www.cnblogs.com/peida/archive/2012/12/11/2812294.html" target="_blank" rel="noopener">博客园 – 每天一个linux命令（35）：ln 命令</a></p>
+<p>此时执行python即是python3.7版本<br>
+<img src="https://ws1.sinaimg.cn/mw690/005EgYNMly1g2ynt37gvzj30i102vmx4.jpg" alt=""></p>
+<h2 id="操作遇到的问题"><a class="markdownIt-Anchor" href="#操作遇到的问题"></a> 操作遇到的问题：</h2>
+<p>1、make install安装python3.7时报 No module named ‘_ctypes’ 错误的解决办法：</p>
+<p>答：<code>yum install libffi-devel</code></p>
+<p>参考： <a href="https://stackoverflow.com/questions/27022373/python3-importerror-no-module-named-ctypes-when-using-value-from-module-mul" target="_blank" rel="noopener">StackOverflow – Python3: ImportError: No module named ‘_ctypes’ when using Value from module multiprocessing</a></p>
 
 	</div>
 	

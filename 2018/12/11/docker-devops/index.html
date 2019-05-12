@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   
-  <title>系统学习 Docker 践行 DevOps 理念 | 程序小工</title>
+  <title>【Docker】系统学习 Docker 践行 DevOps 理念 | 程序小工</title>
   <meta name="description" content="遇见更好的自己~">
   <meta name="keywords" content="">
   <meta name="HandheldFriendly" content="True">
@@ -16,14 +16,14 @@
   <meta name="description" content="Docker容器化技术已经越来越成为环境部署的主流趋势，一键式部署，并且保证线上线下环境的一致性，节省问题排查的时间，维护效率高，并且对底层硬件的要求比传统虚拟机低，可以提升系统资源的利用率，开发 Docker容器技术所实现的微服务架构，即：将一个环境的各个部分（nginx网络服务、web网站代码数据、mysql/redis/elasticsearch等数据库服务）进行分离，再通过网络架构实现网络">
 <meta name="keywords" content="Docker,DevOps">
 <meta property="og:type" content="article">
-<meta property="og:title" content="系统学习 Docker 践行 DevOps 理念">
+<meta property="og:title" content="【Docker】系统学习 Docker 践行 DevOps 理念">
 <meta property="og:url" content="https://blog.i2arch.tech/2018/12/11/docker-devops/index.html">
 <meta property="og:site_name" content="程序小工">
 <meta property="og:description" content="Docker容器化技术已经越来越成为环境部署的主流趋势，一键式部署，并且保证线上线下环境的一致性，节省问题排查的时间，维护效率高，并且对底层硬件的要求比传统虚拟机低，可以提升系统资源的利用率，开发 Docker容器技术所实现的微服务架构，即：将一个环境的各个部分（nginx网络服务、web网站代码数据、mysql/redis/elasticsearch等数据库服务）进行分离，再通过网络架构实现网络">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-11T13:25:37.902Z">
+<meta property="og:updated_time" content="2019-05-12T15:53:30.763Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="系统学习 Docker 践行 DevOps 理念">
+<meta name="twitter:title" content="【Docker】系统学习 Docker 践行 DevOps 理念">
 <meta name="twitter:description" content="Docker容器化技术已经越来越成为环境部署的主流趋势，一键式部署，并且保证线上线下环境的一致性，节省问题排查的时间，维护效率高，并且对底层硬件的要求比传统虚拟机低，可以提升系统资源的利用率，开发 Docker容器技术所实现的微服务架构，即：将一个环境的各个部分（nginx网络服务、web网站代码数据、mysql/redis/elasticsearch等数据库服务）进行分离，再通过网络架构实现网络">
 
   <link href="https://fonts.googleapis.com/css?family=Inconsolata|Titillium+Web" rel="stylesheet">
@@ -143,7 +143,7 @@
 
 	<h2 class="title">
   	<a href="">
-    	系统学习 Docker 践行 DevOps 理念
+    	【Docker】系统学习 Docker 践行 DevOps 理念
     </a>
 	</h2>
 
@@ -157,7 +157,7 @@
     
     <div class="cats">
         <i class="icon icon-folder-open"></i>
-        <a href="../../../../categories/Docker/">Docker</a>, <a href="../../../../categories/Docker/Linux/">Linux</a>
+        <a href="../../../../categories/【Docker相关】/">【Docker相关】</a>
     </div>
 
 
@@ -179,7 +179,7 @@
 	</section>
 
 	
-	<section class="toc-wrapper"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#vagrant基本使用"><span class="toc-text"> Vagrant基本使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-machine"><span class="toc-text"> Docker Machine</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-在虚拟机中自动安装-docker-engine-的工具"><span class="toc-text"> 1、在虚拟机中自动安装 Docker Engine 的工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-docker-machine-在-mac-中的应用"><span class="toc-text"> 2、docker-machine 在 mac 中的应用：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-docker-machine-在阿里云上的使用"><span class="toc-text"> 3、docker machine 在阿里云上的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用"><span class="toc-text"> 使用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-架构和底层技术简介"><span class="toc-text"> Docker 架构和底层技术简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#镜像-image"><span class="toc-text"> 镜像 Image</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1什么是-image"><span class="toc-text"> 1.什么是 Image</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2image-的获取"><span class="toc-text"> 2.Image 的获取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3创建-image"><span class="toc-text"> 3.创建 Image</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#容器-container"><span class="toc-text"> 容器 Container</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1什么是-container"><span class="toc-text"> 1.什么是 Container</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2相关命令"><span class="toc-text"> 2.相关命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构建-docker-镜像"><span class="toc-text"> 构建 Docker 镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dockerfile-语法梳理"><span class="toc-text"> Dockerfile 语法梳理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#关键字"><span class="toc-text"> 关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dockerfile-格式-shell-格式和-exec-格式"><span class="toc-text"> Dockerfile 格式： Shell 格式和 Exec 格式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#遇到的问题"><span class="toc-text"> 遇到的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1编辑-vagrantfile设置启动虚拟机时自动执行的命令但是进入到虚拟机中后docker-没有启动手动启动-docker-后有报错"><span class="toc-text"> 1.编辑 Vagrantfile，设置启动虚拟机时自动执行的命令，但是进入到虚拟机中后，docker 没有启动，手动启动 docker 后，有报错:</span></a></li></ol></li></ol></section>
+	<section class="toc-wrapper"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#vagrant基本使用"><span class="toc-text"> Vagrant基本使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-machine"><span class="toc-text"> Docker Machine</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-在虚拟机中自动安装-docker-engine-的工具"><span class="toc-text"> 1、在虚拟机中自动安装 Docker Engine 的工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-docker-machine-在-mac-中的应用"><span class="toc-text"> 2、docker-machine 在 mac 中的应用：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-docker-machine-在阿里云上的使用"><span class="toc-text"> 3、docker machine 在阿里云上的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用"><span class="toc-text"> 使用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-架构和底层技术简介"><span class="toc-text"> Docker 架构和底层技术简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#镜像-image"><span class="toc-text"> 镜像 Image</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1什么是-image"><span class="toc-text"> 1.什么是 Image</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2image-的获取"><span class="toc-text"> 2.Image 的获取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3创建-image"><span class="toc-text"> 3.创建 Image</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#容器-container"><span class="toc-text"> 容器 Container</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1什么是-container"><span class="toc-text"> 1.什么是 Container</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2相关命令"><span class="toc-text"> 2.相关命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构建-docker-镜像"><span class="toc-text"> 构建 Docker 镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dockerfile-语法梳理"><span class="toc-text"> Dockerfile 语法梳理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#关键字"><span class="toc-text"> 关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dockerfile-格式-shell-格式和-exec-格式"><span class="toc-text"> Dockerfile 格式： Shell 格式和 Exec 格式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dockerfile实践"><span class="toc-text"> Dockerfile实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#将python程序打包成image并运行成为container"><span class="toc-text"> 将python程序打包成image，并运行成为container</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dockerfile实战2"><span class="toc-text"> Dockerfile实战2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#遇到的问题"><span class="toc-text"> 遇到的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1编辑-vagrantfile设置启动虚拟机时自动执行的命令但是进入到虚拟机中后docker-没有启动手动启动-docker-后有报错"><span class="toc-text"> 1.编辑 Vagrantfile，设置启动虚拟机时自动执行的命令，但是进入到虚拟机中后，docker 没有启动，手动启动 docker 后，有报错:</span></a></li></ol></li></ol></section>
 	
 
 	<section class="article typo">
@@ -356,6 +356,16 @@ config.vm.box = “centos/7”</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">RUN [ <span class="string">"apt-get"</span>, <span class="string">"install"</span>, <span class="string">"-y"</span>, <span class="string">"vim"</span> ]</span><br><span class="line">CMD [ <span class="string">"/bin/echo"</span>, <span class="string">"hello docker"</span> ]</span><br><span class="line">ENTRYPOINT [ <span class="string">"/bin/bash"</span>, <span class="string">"-c"</span>, <span class="string">"echo hello <span class="variable">$name</span>"</span> ]</span><br><span class="line"><span class="comment">#输出 hello docker</span></span><br><span class="line"></span><br><span class="line">ENTRYPOINT [<span class="string">"/bin/echo"</span>, <span class="string">"hello <span class="variable">$name</span>"</span>]</span><br><span class="line"><span class="comment">#输出hello $name [echo指令未被识别]</span></span><br></pre></td></tr></table></figure>
 <p>(2) shell 格式示例</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">ENV name Docker</span><br><span class="line">ENTRYPOINT <span class="built_in">echo</span> <span class="string">"hello <span class="variable">$&#123;name&#125;</span>"</span></span><br></pre></td></tr></table></figure>
+<h2 id="dockerfile实践"><a class="markdownIt-Anchor" href="#dockerfile实践"></a> Dockerfile实践</h2>
+<h3 id="将python程序打包成image并运行成为container"><a class="markdownIt-Anchor" href="#将python程序打包成image并运行成为container"></a> 将python程序打包成image，并运行成为container</h3>
+<p>准备：<br>
+1.python环境<br>
+2.flask框架</p>
+<p>编写Dockerfile</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">FROM python:2.7</span><br><span class="line">LABEL  maintainer=<span class="string">"zqunor&lt;zqunor@gmail.com&gt;"</span></span><br><span class="line">RUN pip install flask</span><br><span class="line">COPY app.py /app</span><br><span class="line">WORKDIE /app</span><br><span class="line">CMD [<span class="string">"python"</span>, <span class="string">"app.py"</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> flask</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"><span class="meta">@app.route('/')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'hello docker"</span></span><br><span class="line"><span class="string">if __name__ == '</span>__main__<span class="string">':</span></span><br><span class="line"><span class="string">    app.run();</span></span><br></pre></td></tr></table></figure>
+<h2 id="dockerfile实战2"><a class="markdownIt-Anchor" href="#dockerfile实战2"></a> Dockerfile实战2</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#进入到ubuntu容器中</span></span><br><span class="line">docker run -it ubuntu</span><br><span class="line"><span class="comment">#安装stress压力测试工具</span></span><br><span class="line">apt-get update &amp;&amp; apt-get install -y stress</span><br><span class="line"><span class="comment">#查看stress安装目录</span></span><br><span class="line"><span class="built_in">which</span> stress</span><br><span class="line"><span class="comment">#查看stress命令帮助信息</span></span><br><span class="line">stress --<span class="built_in">help</span></span><br><span class="line"><span class="comment">#启动一个进程，并输出debug信息（默认为进程分配256MB）</span></span><br><span class="line">stress -vm 1 --verbose</span><br></pre></td></tr></table></figure>
 <h2 id="遇到的问题"><a class="markdownIt-Anchor" href="#遇到的问题"></a> 遇到的问题</h2>
 <h3 id="1编辑-vagrantfile设置启动虚拟机时自动执行的命令但是进入到虚拟机中后docker-没有启动手动启动-docker-后有报错"><a class="markdownIt-Anchor" href="#1编辑-vagrantfile设置启动虚拟机时自动执行的命令但是进入到虚拟机中后docker-没有启动手动启动-docker-后有报错"></a> 1.编辑 Vagrantfile，设置启动虚拟机时自动执行的命令，但是进入到虚拟机中后，docker 没有启动，手动启动 docker 后，有报错:</h3>
 <p><code>Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get http://%2Fvar%2Frun%2Fdocker.sock/v1.39/version: dial unix /var/run/docker.sock: connect: permission denied</code></p>
@@ -367,7 +377,7 @@ config.vm.box = “centos/7”</p>
 		<blockquote class="post-announce">
 			<ul>
 				<li>版权声明:  感谢您的阅读，本文由<a href="/">程序小工</a>版权所有。如若转载，请注明出处。</li>
-				<li>文章标题: <span class"title"="">系统学习 Docker 践行 DevOps 理念</span></li>
+				<li>文章标题: <span class"title"="">【Docker】系统学习 Docker 践行 DevOps 理念</span></li>
 				<li>文章链接: <a href="">https://blog.i2arch.tech2018/12/11/docker-devops/</a></li>
 			</ul>
 		</blockquote>
@@ -378,8 +388,10 @@ config.vm.box = “centos/7”</p>
 				<span class="art-item-right">
 					上一篇:
 					
-							没有了
-							<i class="icon icon-coffee"></i>
+						<a href="../../../../2019/03/15/mysql-index/" rel="prev" title="【MySQL】索引（Index）">
+							【MySQL】索引（Index）
+							<i class="icon icon-chevron-thin-right"></i>
+						</a>
 					
 				</span>
 				<br>
@@ -407,6 +419,20 @@ config.vm.box = “centos/7”</p>
             
                 <li>
                     <i class="icon icon-point-right"></i>
+                    <a href="https://blog.i2arch.tech/2019/04/01/summary-yearly-1/">
+                        【总结】一年的工作任务总结
+                    </a>
+                </li>
+            
+                <li>
+                    <i class="icon icon-point-right"></i>
+                    <a href="https://blog.i2arch.tech/2019/03/15/mysql-index/">
+                        【MySQL】索引（Index）
+                    </a>
+                </li>
+            
+                <li>
+                    <i class="icon icon-point-right"></i>
                     <a href="https://blog.i2arch.tech/2018/08/30/http/">
                         【HTTP】原理结合实践
                     </a>
@@ -416,20 +442,6 @@ config.vm.box = “centos/7”</p>
                     <i class="icon icon-point-right"></i>
                     <a href="https://blog.i2arch.tech/2018/08/13/git-modify-commit-message/">
                         【Git】修改已经提交的commit内容
-                    </a>
-                </li>
-            
-                <li>
-                    <i class="icon icon-point-right"></i>
-                    <a href="https://blog.i2arch.tech/2018/08/08/js-react/">
-                        【React入门】实现todolist功能
-                    </a>
-                </li>
-            
-                <li>
-                    <i class="icon icon-point-right"></i>
-                    <a href="https://blog.i2arch.tech/2018/08/07/tp5-controller3/">
-                        【TP5深入理解】控制器(三)--前置操作
                     </a>
                 </li>
             
@@ -451,7 +463,7 @@ config.vm.box = “centos/7”</p>
 </article>
 <script>
 	window.subData = {
-		title: '系统学习 Docker 践行 DevOps 理念',
+		title: '【Docker】系统学习 Docker 践行 DevOps 理念',
 		tools: true
 	}
 </script>
