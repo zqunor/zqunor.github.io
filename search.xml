@@ -3,7 +3,7 @@
   
     
     <entry>
-      <title>Centos上线部署laravel项目</title>
+      <title>CentOS上线部署laravel项目</title>
       <link href="/2019/05/13/linux-deploy-laravel/"/>
       <url>/2019/05/13/linux-deploy-laravel/</url>
       
@@ -12,7 +12,7 @@
       
       <categories>
           
-          <category> 【PHP框架】 </category>
+          <category> 【Linux相关】 </category>
           
       </categories>
       
@@ -112,6 +112,29 @@
         <tags>
             
             <tag> 设计模式 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>【Laravel】Command 脚本任务实现</title>
+      <link href="/2019/04/23/php-laravel-command/"/>
+      <url>/2019/04/23/php-laravel-command/</url>
+      
+        <content type="html"><![CDATA[<p>大多数项目在业务发展过程中，都需要修复历史数据和定时任务来完成一些业务逻辑，这部分通常都需要通过脚本来完成，一般的框架爱也都提供这部分的功能，学习并使用是工作中的基本要求。</p><a id="more"></a><h2 id="基本流程"><a class="markdownIt-Anchor" href="#基本流程"></a> 基本流程</h2><p><strong>commands模式</strong>运行脚本定时任务基本流程：</p><ol><li>在 <code>app/Console/Commands/</code> 目录下创建脚本任务文件</li><li>在<code>app/Console/Kernel.php</code> <code>$commands</code>数组中添加新建的脚本类</li><li>在<code>app/Console/Kernel.php</code> <code>schedule()</code>方法中添加脚本定时任务命令</li></ol><h2 id="具体实现"><a class="markdownIt-Anchor" href="#具体实现"></a> 具体实现</h2><h3 id="创建脚本文件"><a class="markdownIt-Anchor" href="#创建脚本文件"></a> 创建脚本文件</h3><p><code>app/Console/Commands/QingShan/commandQingshan.php</code></p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Console</span>\<span class="title">Commands</span>\<span class="title">QingShan</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Console</span>\<span class="title">Command</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">commandQingshan</span> <span class="keyword">extends</span> <span class="title">Command</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">// 自定义脚本命令签名</span></span><br><span class="line">    <span class="keyword">protected</span> $signature = <span class="string">'qingshan:commandQingshan'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 自定义脚本命令描述</span></span><br><span class="line">    <span class="keyword">protected</span> $description = <span class="string">'这里是脚本命令的描述qingshan'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建一个新的命令实例</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">parent</span>::__construct();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//具体执行的业务内容</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="注册脚本"><a class="markdownIt-Anchor" href="#注册脚本"></a> 注册脚本</h3><p>在<code>app/Console/Kernel.php</code>  <code>$commands</code>数组中追加新建的脚本类</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> $commands = [</span><br><span class="line">    <span class="string">'BasicIT\LumenVendorPublish\VendorPublishCommand'</span>,</span><br><span class="line">    Commands\QingShan\commandQingshan::class</span><br><span class="line">]</span><br></pre></td></tr></table></figure><h3 id="执行脚本"><a class="markdownIt-Anchor" href="#执行脚本"></a> 执行脚本</h3><h4 id="查看脚本命令调用方式"><a class="markdownIt-Anchor" href="#查看脚本命令调用方式"></a> 查看脚本命令调用方式</h4><ol><li>在项目目录下执行下面的命令，查看当前可以执行的命令</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; php artisan list</span><br></pre></td></tr></table></figure><p>在<code>Available commands</code>下会有一列：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">qingshan</span><br><span class="line">    qingshan:commandQingshan     这里是脚本命令的描述qingshan</span><br></pre></td></tr></table></figure><ol start="2"><li>执行脚本命令</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; php artisan qingshan:commandQingshan</span><br></pre></td></tr></table></figure><h3 id="添加到定时任务"><a class="markdownIt-Anchor" href="#添加到定时任务"></a> 添加到定时任务</h3><p>在<code>app/Console/Kernel.php</code> <code>schedule()</code>方法中添加脚本定时任务命令</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 设置commandQingshan脚本为每天15：00自动执行</span></span><br><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">schedule</span><span class="params">(Schedule $schedule)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $schedule-&gt;command(<span class="string">'qingshan:commandQingshan'</span>)-&gt;dailyAt(<span class="string">'15:00'</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>参考资料：</p><p><a href="https://learnku.com/docs/laravel/5.8/artisan/3913" target="_blank" rel="noopener">Larave5.8中文文档–Artisan 命令行</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 【PHP框架】 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> laravel </tag>
             
         </tags>
       
